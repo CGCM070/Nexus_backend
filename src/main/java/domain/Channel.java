@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
-public class Channels {
+public class Channel {
 
 
     @Id

@@ -1,10 +1,6 @@
 package domain;
 
-import enums.Status;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -16,20 +12,22 @@ import java.sql.Timestamp;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
-public class Intitations {
-
-
+public class Server {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
-    private Status status;
 
-    private Timestamp createAt;
+    @Column(length = 45)
+    private String name;
 
-    private Timestamp expireAt;
+    @Column(length = 45)
+    private String description;
 
+    private Timestamp createdAt;
+
+    private Timestamp updatedAt;
 
 }

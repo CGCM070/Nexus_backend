@@ -15,7 +15,7 @@ import java.security.Timestamp;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
-public class Messages {
+public class Message {
 
 
     @Id
