@@ -1,4 +1,5 @@
-package domain;
+package nexus_backend.domain;
+
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +13,7 @@ import java.sql.Timestamp;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
-public class Task {
+public class Note {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +23,17 @@ public class Task {
     @Column(length = 45)
     private String title;
 
-    private String description;
-
-    private String status;
+    private String content;
 
     private Timestamp createdAt;
 
     private Timestamp updatedAt;
+
+    @ManyToOne
+    private Channel channel;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

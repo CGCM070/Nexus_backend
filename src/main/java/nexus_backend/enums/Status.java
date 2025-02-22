@@ -1,4 +1,4 @@
-package enums;
+package nexus_backend.enums;
 
 public enum Status {
     PENDING,

@@ -1,12 +1,10 @@
-package domain;
+package nexus_backend.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
+
 
 @Data
 @AllArgsConstructor
@@ -25,8 +23,17 @@ public class Message {
 
     private String content;
 
-    private Timestamp createAt;
+    private Timestamp createdAt;
 
     private Timestamp updateAt;
+
+
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private Channel channel;
+
+
 
 }

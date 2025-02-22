@@ -1,5 +1,4 @@
-package domain;
-
+package nexus_backend.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,21 +12,34 @@ import java.sql.Timestamp;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
-public class Channel {
-
+public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Column(length = 45)
+    private String title;
 
-    private String name;
-
-    @Column(length = 100)
     private String description;
+
+    private String status;
+
     private Timestamp createdAt;
+
     private Timestamp updatedAt;
 
+
+    @ManyToOne
+    private Channel channel;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User creator;
+
+    @ManyToOne
+    @JoinColumn(name = "assigned_to_id")
+    private User assignedTo;
 
 }

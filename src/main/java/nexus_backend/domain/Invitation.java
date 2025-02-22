@@ -1,5 +1,6 @@
-package domain;
+package nexus_backend.domain;
 
+import nexus_backend.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,22 +13,23 @@ import java.sql.Timestamp;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
-public class Server {
+public class Invitation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
-
-    @Column(length = 45)
-    private String name;
-
-    @Column(length = 45)
-    private String description;
+    private Status status;
 
     private Timestamp createdAt;
 
-    private Timestamp updatedAt;
+    private Timestamp expireAt;
+
+    @ManyToOne
+    private User inviter;
+
+    @ManyToOne
+    private Server server;
 
 }

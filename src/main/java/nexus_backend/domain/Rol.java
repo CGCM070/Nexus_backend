@@ -1,4 +1,4 @@
-package domain;
+package nexus_backend.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
