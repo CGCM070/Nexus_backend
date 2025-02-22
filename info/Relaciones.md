@@ -1,12 +1,42 @@
-### Relaciones entre Entidades
+# Relaciones entre Entidades
 
-1. **User - Server**: Muchos a muchos a través de `user_servers`.
-2. **Server - Channel**: Uno a muchos.
-3. **Channel - Message**: Uno a muchos.
-4. **User - Message**: Uno a muchos.
-5. **User - Note**: Uno a muchos.
-6. **Channel - Note**: Uno a muchos.
-7. **User - Task**: Dos relaciones uno a muchos (creador y asignado).
-8. **Channel - Task**: Uno a muchos.
-9. **User - Invitation**: Uno a muchos (como invitador).
-10. **Server - Invitation**: Uno a muchos.
+## User - Server
+**Relación:** Muchos a muchos.  
+**Tabla intermedia:** `user_servers`.  
+**Descripción:** Un usuario puede estar en varios servidores y un servidor puede tener varios usuarios.
+
+## Server - Channel
+**Relación:** Uno a muchos.  
+**Descripción:** Un servidor puede tener muchos canales.
+
+## Channel - Message
+**Relación:** Uno a muchos.  
+**Descripción:** Un canal puede contener muchos mensajes.
+
+## User - Message
+**Relación:** Uno a muchos.  
+**Descripción:** Un usuario puede crear muchos mensajes.
+
+## User - Note
+**Relación:** Uno a muchos.  
+**Descripción:** Un usuario puede crear muchas notas.
+
+## Channel - Note
+**Relación:** Uno a muchos.  
+**Descripción:** Un canal puede contener muchas notas.
+
+## User - Task
+**Relación:** Dos relaciones uno a muchos (creador y asignado).  
+**Descripción:** Un usuario puede crear muchas tareas y un usuario puede estar asignado a muchas tareas.
+
+## Channel - Task
+**Relación:** Uno a muchos.  
+**Descripción:** Un canal puede contener muchas tareas.
+
+## User - Invitation
+**Relación:** Uno a muchos (como invitador).  
+**Descripción:** Un usuario puede invitar a muchas personas.
+
+## Server - Invitation
+**Relación:** Uno a muchos.  
+**Descripción:** Un servidor puede tener muchas invitaciones.  
