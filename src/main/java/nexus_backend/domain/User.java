@@ -49,7 +49,7 @@ public class User {
     @Builder.Default
     private Set<Invitation> invitations = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<Note> notes = new HashSet<>();
 
