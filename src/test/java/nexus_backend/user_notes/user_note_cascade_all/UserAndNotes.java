@@ -137,15 +137,15 @@ class UserAndNotes {
         transactionTemplate.executeWithoutResult(transactionStatus -> {
 
             //busco al usuario
-            User user = userRepository.findById(1L).orElseThrow();
+            User paco = userRepository.findById(2L).orElseThrow();
 
-            Note noteUnlink = user.getNotes().iterator().next();
+            Note noteUnlink = paco.getNotes().iterator().next();
             // con el orphanRemoval = true al setear a null el usuario de la nota
             // se elimina la nota
             noteUnlink.setUser(null);
 
             //  Guardar los cambios
-            userRepository.save(user);
+            userRepository.save(paco);
 
         });
     }
