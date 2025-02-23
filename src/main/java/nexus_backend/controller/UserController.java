@@ -61,9 +61,8 @@ public class UserController {
 
 
     @DeleteMapping("/notes/{noteId}")
-    public String deleteNoteForUser(@PathVariable Long noteId) {
-        log.info("Eliminando la nota con id: {}", noteId);
+    public void deleteNoteForUser(@PathVariable Long noteId) {
+        log.info("Delete note whit id: {}", noteId);
         this.userService.deleteNoteForUser(noteId);
-        return "Nota eliminada exitosamente";
     }
 }

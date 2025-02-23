@@ -1,7 +1,6 @@
 package nexus_backend.service;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import nexus_backend.domain.Note;
 import nexus_backend.domain.User;
 import nexus_backend.exception.NoteNotFoundException;
