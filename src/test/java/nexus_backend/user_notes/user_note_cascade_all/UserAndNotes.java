@@ -2,8 +2,10 @@ package nexus_backend.user_notes.user_note_cascade_all;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import nexus_backend.domain.Note;
 import nexus_backend.domain.User;
+import nexus_backend.exception.NoteNotFoundException;
 import nexus_backend.repository.NoteRepository;
 import nexus_backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -203,7 +205,7 @@ class UserAndNotes {
 
     @Test
     @Order(5)
-    void UpdatedNoteToUser (){
+    void LinkNoteToUser (){
         // en base de datos tenemos una nota sin usuario el noteId es 4
         // y un usuario sin notas el userId es 3 juan
 
@@ -236,6 +238,29 @@ class UserAndNotes {
             userRepository.save(juan);
         });
     };
+
+
+
+    @Transactional
+    public Note updateNoteForUser(Long noteId, Note updatedNote) {
+        // Buscar la nota por su ID
+        Note existingNote = noteRepository.findById(noteId)
+                .orElseThrow(() -> new NoteNotFoundException(noteId));
+
+        // Verificar si la nota está asociada a un usuario
+        User user = existingNote.getUser();
+        if (user == null) {
+            throw new IllegalStateException("La nota no está asociada a un usuario");
+        }
+
+        // Actualizamos los atributos de la nota
+        existingNote.setTitle(updatedNote.getTitle());
+        existingNote.setContent(updatedNote.getContent());
+
+        // Guardamos los cambios de la nota en la base de datos
+        return noteRepository.save(existingNote); // También puedes omitir save si no estás cambiando otras propiedades que no son del usuario
+    }
+
 }
 
 
