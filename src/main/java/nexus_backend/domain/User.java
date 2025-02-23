@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -51,7 +53,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private Set<Note> notes = new HashSet<>();
+    private List<Note> notes = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator")
     private Set<Task> createdTasks;
