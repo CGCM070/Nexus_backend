@@ -1,7 +1,6 @@
 package nexus_backend.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import nexus_backend.domain.Note;
 import nexus_backend.domain.User;
 import nexus_backend.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -20,49 +19,33 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @GetMapping("")
     public List<User> getAllUsers() {
-        return this.userService.getAllUsers();
+        return userService.getAllUsers();
     }
-
-
-    @GetMapping("/{id}/notes")
-    public List<Note> getAllUserNotes(@PathVariable Long id) {
-        log.info("User notes whit  id : {}", id);
-        return this.userService.getAllUserNotes(id);
-    }
-
-
-    @PostMapping("")
-    public User createUser(@RequestBody User user) {
-        log.info("Create new user ");
-        return this.userService.createUser(user);
-    }
-
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
-        log.info("Search user whit  id : {}", id);
-        return this.userService.findById(id);
+        log.info("Fetching user with ID: {}", id);
+        return userService.findById(id);
     }
 
-    @PostMapping("/{id}/notes")
-    public Note createNoteForUser(@PathVariable Long id, @RequestBody Note note) {
-        log.info("Create note for user whit id : {}", id);
-        return this.userService.createNoteForUser(id, note);
+    @PostMapping("")
+    public User createUser(@RequestBody User user) {
+        log.info("Creating new user");
+        return userService.createUser(user);
     }
 
-    @GetMapping("/{userId}/notes/{noteId}")
-    public Note getNoteById(@PathVariable Long userId, @PathVariable Long noteId) {
-        log.info("Get note whit id: {}  user id: {}", noteId, userId);
-        return this.userService.getNoteById(userId, noteId);
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+        log.info("Updating user with ID: {}", id);
+        return userService.updateUser(id, user);
     }
 
-
-    @DeleteMapping("/notes/{noteId}")
-    public void deleteNoteForUser(@PathVariable Long noteId) {
-        log.info("Delete note whit id: {}", noteId);
-        this.userService.deleteNoteForUser(noteId);
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        log.info("Deleting user with ID: {}", id);
+        userService.deleteUser(id);
     }
+
 }
