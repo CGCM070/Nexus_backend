@@ -3,12 +3,14 @@ package nexus_backend;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import nexus_backend.domain.Channel;
+import nexus_backend.domain.Note;
 import nexus_backend.domain.Server;
 import nexus_backend.domain.User;
 import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.ServerRepository;
 import nexus_backend.repository.UserRepository;
 import nexus_backend.service.ChannelService;
+import nexus_backend.service.NoteService;
 import nexus_backend.service.UserRegistrationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
@@ -20,6 +22,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.sql.Timestamp;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @SpringBootTest
@@ -51,6 +54,9 @@ class UserRegistrationServiceTest {
 
     @Autowired
     private ChannelService channelService;
+
+    @Autowired
+    private NoteService noteService;
 
     @Test
     @Order(1)
@@ -108,6 +114,32 @@ class UserRegistrationServiceTest {
             // Verificar que el usuario ha sido agregado al canal
             Channel updatedChannel = channelRepository.findById(1L).orElseThrow(() -> new RuntimeException("Channel not found"));
         //    assertTrue(updatedChannel.getInvitedUsers().stream().anyMatch(user -> user.getId().equals(newUser.getId())));
+        });
+    }
+
+
+    @Test
+    @Order(3)
+    void newUserCreatesNoteInChannel() {
+        transactionTemplate.executeWithoutResult(transactionStatus -> {
+            // Buscar el usuario creado en el test anterior
+            User newUser = userRepository.findById(2L).orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Obtener el canal existente
+            Channel channel = channelRepository.findById(1L).orElseThrow(() -> new RuntimeException("Channel not found"));
+
+            // Crear una nueva nota en el canal
+            Note newNote = Note.builder()
+                    .title("Nueva Nota")
+                    .content("Contenido de la nueva nota")
+                    .createdAt(new Timestamp(System.currentTimeMillis()))
+                    .updatedAt(new Timestamp(System.currentTimeMillis()))
+                    .build();
+            noteService.createNoteForUser(newUser.getId(), channel.getId(), newNote);
+
+            // Verificar que la nota ha sido creada
+            Note createdNote = noteService.getNoteById(newNote.getId());
+            assertNotNull(createdNote);
         });
     }
 }

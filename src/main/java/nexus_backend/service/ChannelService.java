@@ -45,8 +45,6 @@ public class ChannelService {
 
 
 
-
-
     @Transactional
     public void inviteUserToChannel(Long channelId, Long userId) {
         Channel channel = channelRepository.findById(channelId).orElseThrow(() -> new RuntimeException("Channel not found"));

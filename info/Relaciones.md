@@ -3,9 +3,9 @@
 
 ## 1. **Estructura de la Base de Datos**
 
-- **User**: Centro de la aplicación, con relaciones a mensajes, notas, tareas y un servidor personal.
+- **User**: Centro de la aplicación, con relaciones a mensajes, notas, tareas, un servidor personal y canales a los que ha sido invitado.
 - **Server**: Representa un espacio de trabajo, contiene canales y un usuario.
-- **Channel**: Pertenece a un servidor, contiene mensajes, notas y tareas.
+- **Channel**: Pertenece a un servidor, contiene mensajes, notas, tareas y usuarios invitados.
 - **Message**, **Note**, **Task**: Contenido creado por usuarios en canales específicos.
 - **Invitation**: Maneja invitaciones a servidores.
 
@@ -87,6 +87,10 @@
 ### **Channel - Task**
 - **Relación**: Uno a muchos.
 - **Descripción**: Un canal puede contener muchas tareas.
+
+### **User - Channel**
+- **Relación**: Muchos a muchos.
+- **Descripción**: Un usuario puede ser invitado a muchos canales y un canal puede tener muchos usuarios invitados.
 
 ### **User - Invitation**
 - **Relación**: Uno a muchos (como invitado).
