@@ -22,8 +22,8 @@ public class GeneralControllerAdvice {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("status", ex.getStatusCode().value());
         errorResponse.put("error", ex.getStatusCode().getClass().getSimpleName());
-        errorResponse.put("message", ex.getReason()); // Extrae el mensaje correcto
-        errorResponse.put("path", request.getRequestURI()); // Agrega el path
+        errorResponse.put("message", ex.getReason());
+        errorResponse.put("path", request.getRequestURI());
         errorResponse.put("timestamp", LocalDateTime.now());
         return errorResponse;
     }
