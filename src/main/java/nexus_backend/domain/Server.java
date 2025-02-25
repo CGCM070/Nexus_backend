@@ -33,7 +33,7 @@ public class Server {
 
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "server")
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL)
     @Builder.Default
     private Set<Invitation> invitations = new HashSet<>();
 
@@ -42,13 +42,19 @@ public class Server {
     private Set<Channel> channels = new HashSet<>();
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "server_user",
-            joinColumns = @JoinColumn(name = "server_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    @Builder.Default
+//    @ManyToMany
+//    @JoinTable(
+//            name = "server_user",
+//            joinColumns = @JoinColumn(name = "server_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id")
+//    )
+//    @Builder.Default
+//    @JsonIgnore
+//    private Set<User> users = new HashSet<>();
+
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
     @JsonIgnore
-    private Set<User> users = new HashSet<>();
+    private User user;
 }

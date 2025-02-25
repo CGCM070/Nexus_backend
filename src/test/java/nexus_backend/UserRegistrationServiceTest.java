@@ -71,7 +71,7 @@ class UserRegistrationServiceTest {
             //assertNotNull(newUser.getId());
 
             // Verificar que el servidor personal fue creado
-            Server personalServer = serverRepository.findByUsersContaining(newUser).orElseThrow();
+            Server personalServer = serverRepository.findByUser(newUser).orElseThrow(() -> new RuntimeException("Server not found"));
            // assertEquals("Dashboard Personal de Carlos", personalServer.getName());
 
             // Verificar que el canal de bienvenida fue creado

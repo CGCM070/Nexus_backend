@@ -1,18 +1,17 @@
-
 ### Nexus `Cesar Castillo`
 # Flujo de la Aplicación y Propuesta Inicial de Entrada
 
 ## 1. **Estructura de la Base de Datos**
 
-- **User**: Centro de la aplicación, con relaciones a mensajes, notas, tareas y servidores.
-- **Server**: Representa un espacio de trabajo, contiene canales y usuarios.
+- **User**: Centro de la aplicación, con relaciones a mensajes, notas, tareas y un servidor personal.
+- **Server**: Representa un espacio de trabajo, contiene canales y un usuario.
 - **Channel**: Pertenece a un servidor, contiene mensajes, notas y tareas.
 - **Message**, **Note**, **Task**: Contenido creado por usuarios en canales específicos.
 - **Invitation**: Maneja invitaciones a servidores.
 
 ## 2. **Flujo Actual de la Aplicación**
 
-1. Los usuarios pueden pertenecer a múltiples servidores.
+1. Cada usuario tiene un servidor personal.
 2. Cada servidor tiene múltiples canales.
 3. Los usuarios interactúan en canales enviando mensajes, creando notas y tareas.
 4. Las invitaciones permiten a los usuarios unirse a nuevos servidores.
@@ -26,7 +25,7 @@
 ### b) **Creación del Dashboard Personal**
 
 1. Crear un nuevo `Server` para el usuario con un nombre como "Dashboard Personal de [Username]".
-2. Establecer una relación entre el usuario y este servidor en `user_servers`.
+2. Establecer una relación entre el usuario y este servidor.
 
 ### c) **Canal de Bienvenida**
 
@@ -39,12 +38,11 @@
 
 ### e) **Invitación de Usuarios**
 
--  la clase `Invitation`  para manejar invitaciones a canales específicos.
-- Añadir un campo `channel` a la clase `Invitation` si es necesario.
+- Utilizar la clase `Invitation` para manejar invitaciones a servidores específicos.
 
 ### f) **Aceptación de Invitaciones**
 
-- Implementar un método para procesar la aceptación de invitaciones, añadiendo al usuario al servidor y canal correspondientes.
+- Implementar un método para procesar la aceptación de invitaciones, añadiendo al usuario al servidor correspondiente.
 
 ### Enfoque para la Entrada Inicial
 
@@ -59,9 +57,8 @@
 ## 4. **Relaciones entre Entidades**
 
 ### **User - Server**
-- **Relación**: Muchos a muchos.
-- **Tabla intermedia**: `user_servers`.
-- **Descripción**: Un usuario puede estar en varios servidores y un servidor puede tener varios usuarios.
+- **Relación**: Uno a uno.
+- **Descripción**: Un usuario tiene un servidor personal.
 
 ### **Server - Channel**
 - **Relación**: Uno a muchos.
@@ -92,8 +89,8 @@
 - **Descripción**: Un canal puede contener muchas tareas.
 
 ### **User - Invitation**
-- **Relación**: Uno a muchos (como invitador).
-- **Descripción**: Un usuario puede invitar a muchas personas.
+- **Relación**: Uno a muchos (como invitado).
+- **Descripción**: Un usuario puede recibir muchas invitaciones.
 
 ### **Server - Invitation**
 - **Relación**: Uno a muchos.

@@ -27,9 +27,14 @@ public class Invitation {
 
     private Timestamp expireAt;
 
+//    @ManyToOne
+//    @JsonIgnore
+//    private User inviter;
+
     @ManyToOne
+    @JoinColumn(name = "invited_user_id")
     @JsonIgnore
-    private User inviter;
+    private User invitedUser;
 
     @ManyToOne
     @JsonIgnore

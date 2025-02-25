@@ -1,5 +1,6 @@
 package nexus_backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,11 +36,13 @@ public class Task {
     private Channel channel;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "creator_id")
     private User creator;
 
     @ManyToOne
     @JoinColumn(name = "assigned_to_id")
+    @JsonIgnore
     private User assignedTo;
 
 }

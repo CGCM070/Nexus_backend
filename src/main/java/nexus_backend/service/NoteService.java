@@ -20,7 +20,7 @@ public class NoteService {
     private final UserRepository userRepository;
     private final ChannelRepository channelRepository;
 
-    @Autowired
+
     public NoteService(NoteRepository noteRepository, UserRepository userRepository, ChannelRepository channelRepository) {
         this.noteRepository = noteRepository;
         this.userRepository = userRepository;

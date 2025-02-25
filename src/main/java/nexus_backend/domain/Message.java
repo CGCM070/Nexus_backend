@@ -1,5 +1,6 @@
 package nexus_backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,9 +30,11 @@ public class Message {
 
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     @ManyToOne
+    @JsonIgnore
     private Channel channel;
 
 

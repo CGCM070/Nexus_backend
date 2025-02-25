@@ -43,12 +43,13 @@ public class User {
     private Timestamp updatedAt;
 
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Server> servers;
+//    @ManyToMany(mappedBy = "users")
+//    private Set<Server> servers;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Server personalServer;
 
-
-    @OneToMany(mappedBy = "inviter")
+    @OneToMany(mappedBy = "invitedUser")
     @Builder.Default
     @JsonIgnore
     private Set<Invitation> invitations = new HashSet<>();

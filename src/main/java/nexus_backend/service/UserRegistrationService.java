@@ -37,8 +37,8 @@ public class UserRegistrationService {
                 .name("Dashboard Personal de " + newUser.getUsername())
                 .description("Tu espacio personal en Nexus")
                 .createdAt(new Timestamp(System.currentTimeMillis()))
+                .user(newUser)
                 .build();
-        personalDashboard.getUsers().add(newUser);
         serverRepository.save(personalDashboard);
 
 
