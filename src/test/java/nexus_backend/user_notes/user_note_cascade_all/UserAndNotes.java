@@ -5,7 +5,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import nexus_backend.domain.Note;
 import nexus_backend.domain.User;
-import nexus_backend.exception.NoteNotFoundException;
 import nexus_backend.repository.NoteRepository;
 import nexus_backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
