@@ -48,4 +48,12 @@ public class Channel {
     @Builder.Default
     private Set<Task> tasks = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "channel_users",
+            joinColumns = @JoinColumn(name = "channel_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> invitedUsers = new HashSet<>();
+
 }

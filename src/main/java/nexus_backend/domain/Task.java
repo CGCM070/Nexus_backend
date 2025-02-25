@@ -33,6 +33,7 @@ public class Task {
 
 
     @ManyToOne
+    @JsonIgnore
     private Channel channel;
 
     @ManyToOne

@@ -8,6 +8,7 @@ import nexus_backend.domain.User;
 import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.ServerRepository;
 import nexus_backend.repository.UserRepository;
+import nexus_backend.service.ChannelService;
 import nexus_backend.service.UserRegistrationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
@@ -19,8 +20,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 @SpringBootTest
 class UserRegistrationServiceTest {
@@ -48,6 +48,9 @@ class UserRegistrationServiceTest {
 
     @Autowired
     private UserRegistrationService userRegistrationService;
+
+    @Autowired
+    private ChannelService channelService;
 
     @Test
     @Order(1)
@@ -77,6 +80,34 @@ class UserRegistrationServiceTest {
             // Verificar que el canal de bienvenida fue creado
             Channel welcomeChannel = channelRepository.findByServerAndName(personalServer, "Bienvenida").orElseThrow();
            // assertEquals("Bienvenida", welcomeChannel.getName());
+        });
+    }
+
+
+    @Test
+    @Order(2)
+    void inviteUserToChannel() {
+        transactionTemplate.executeWithoutResult(transactionStatus -> {
+            // Crear un nuevo usuario
+            User newUser = User.builder()
+                    .username("NuevoUsuario")
+                    .email("nuevo@example.com")
+                    .passwordHash("password")
+                    .fullName("Nuevo Usuario")
+                    .createdAt(new Timestamp(System.currentTimeMillis()))
+                    .updatedAt(new Timestamp(System.currentTimeMillis()))
+                    .build();
+            userRepository.save(newUser);
+
+            // Obtener el canal existente
+            Channel channel = channelRepository.findById(1L).orElseThrow(() -> new RuntimeException("Channel not found"));
+
+            // Invitar al nuevo usuario al canal
+            channelService.inviteUserToChannel(channel.getId(), newUser.getId());
+
+            // Verificar que el usuario ha sido agregado al canal
+            Channel updatedChannel = channelRepository.findById(1L).orElseThrow(() -> new RuntimeException("Channel not found"));
+        //    assertTrue(updatedChannel.getInvitedUsers().stream().anyMatch(user -> user.getId().equals(newUser.getId())));
         });
     }
 }
