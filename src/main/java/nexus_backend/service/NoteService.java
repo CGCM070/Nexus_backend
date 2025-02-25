@@ -1,9 +1,11 @@
 package nexus_backend.service;
 
 import jakarta.transaction.Transactional;
+import nexus_backend.domain.Channel;
 import nexus_backend.domain.Note;
 import nexus_backend.domain.User;
 import nexus_backend.exception.EntityNotFoundException;
+import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.NoteRepository;
 import nexus_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,13 @@ public class NoteService {
 
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
+    private final ChannelRepository channelRepository;
 
     @Autowired
-    public NoteService(NoteRepository noteRepository, UserRepository userRepository) {
+    public NoteService(NoteRepository noteRepository, UserRepository userRepository, ChannelRepository channelRepository) {
         this.noteRepository = noteRepository;
         this.userRepository = userRepository;
+        this.channelRepository = channelRepository;
     }
 
     public List<Note> getAllNotes() {
@@ -45,13 +49,25 @@ public class NoteService {
     }
 
 
-    public Note createNoteForUser(Long userId, Note note) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException(userId , "User"));
-        note.setUser(user);
-        return noteRepository.save(note);
+//    public Note createNoteForUser(Long userId, Note note) {
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new EntityNotFoundException(userId , "User"));
+//        note.setUser(user);
+//        return noteRepository.save(note);
+//
+//    }
 
+    @Transactional
+    public Note createNoteForUser(Long userId, Long channelId, Note note) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId, "User"));
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new EntityNotFoundException(channelId, "Channel"));
+        note.setUser(user);
+        note.setChannel(channel);
+        return noteRepository.save(note);
     }
+
 
     public Note updateNoteById(Long noteId, Note note) {
         Note existingNote = noteRepository.findById(noteId)
@@ -70,7 +86,7 @@ public class NoteService {
     }
 
     public List<Note> getNotesByChannel(Long channelId) {
-        return noteRepository.getNoteByChannel_Id(channelId);
+        return noteRepository.getAllByChannel_Id(channelId);
     }
 
 }

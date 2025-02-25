@@ -31,6 +31,7 @@ public class Note {
     private Timestamp updatedAt;
 
     @ManyToOne
+    @JsonIgnore
     private Channel channel;
 
     @ManyToOne

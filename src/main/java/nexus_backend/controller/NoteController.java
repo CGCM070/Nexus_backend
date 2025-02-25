@@ -31,6 +31,12 @@ public class NoteController {
         return noteService.getNoteById(id);
     }
 
+    @PostMapping("/user/{userId}/channel/{channelId}")
+    public Note createNoteForUser(@PathVariable Long userId, @PathVariable Long channelId, @RequestBody Note note) {
+        log.info("Creating note for user with ID: {} in channel with ID: {}", userId, channelId);
+        return noteService.createNoteForUser(userId, channelId, note);
+    }
+
     @PostMapping("")
     public Note createNote(@RequestBody Note note) {
         log.info("Creating new note");
@@ -49,11 +55,11 @@ public class NoteController {
         return noteService.getNotesByUser(userId);
     }
 
-    @PostMapping("/user/{userId}")
-    public Note createNoteForUser(@PathVariable Long userId, @RequestBody Note note) {
-        log.info("Creating note for user with ID: {}", userId);
-        return noteService.createNoteForUser(userId, note);
-    }
+//    @PostMapping("/user/{userId}")
+//    public Note createNoteForUser(@PathVariable Long userId, @RequestBody Note note) {
+//        log.info("Creating note for user with ID: {}", userId);
+//        return noteService.createNoteForUser(userId, note);
+//    }
 
 
     @PutMapping("/{noteId}")

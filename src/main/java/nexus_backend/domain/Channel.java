@@ -1,6 +1,7 @@
 package nexus_backend.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,6 +33,7 @@ public class Channel {
     private Timestamp updatedAt;
 
     @ManyToOne
+    @JsonIgnore
     private Server server;
 
     @OneToMany(mappedBy = "channel")

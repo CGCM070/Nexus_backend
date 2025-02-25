@@ -1,5 +1,6 @@
 package nexus_backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -42,27 +43,34 @@ public class User {
     private Timestamp updatedAt;
 
 
-    @OneToMany(mappedBy = "user")
-    @Builder.Default
-    private Set<Message> messages = new HashSet<>();
+    @ManyToMany(mappedBy = "users")
+    private Set<Server> servers;
+
 
 
     @OneToMany(mappedBy = "inviter")
     @Builder.Default
+    @JsonIgnore
     private Set<Invitation> invitations = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
+    @JsonIgnore
     private List<Note> notes = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator")
-    private Set<Task> createdTasks;
+    @Builder.Default
+    @JsonIgnore
+    private Set<Task> createdTasks = new HashSet<>();
 
     @OneToMany(mappedBy = "assignedTo")
-    private Set<Task> assignedTasks;
+    @Builder.Default
+    @JsonIgnore
+    private Set<Task> assignedTasks = new HashSet<>();
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Server> servers;
-
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    @JsonIgnore
+    private Set<Message> messages = new HashSet<>();
 
 }

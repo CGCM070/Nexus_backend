@@ -1,8 +1,7 @@
-package nexus_backend.user_notes.user_note_cascade_all;
+package nexus_backend;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import nexus_backend.domain.Note;
 import nexus_backend.domain.User;
 import nexus_backend.repository.NoteRepository;
@@ -16,7 +15,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.sql.Timestamp;
-import java.util.Set;
 
 
 @SpringBootTest

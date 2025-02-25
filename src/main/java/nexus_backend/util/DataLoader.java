@@ -1,3 +1,7 @@
+
+
+
+/*
 package nexus_backend.util;
 
 import jakarta.transaction.Transactional;
@@ -136,3 +140,4 @@ public class DataLoader implements CommandLineRunner {
         logger.info("Created user Usuario4 with no notes.");
     }
 }
+*/

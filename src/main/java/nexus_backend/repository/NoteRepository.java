@@ -9,7 +9,10 @@ import java.util.List;
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Long> {
     List<Note> findAllByUser_Id(Long id);
-    List<Note>getNoteByChannel_Id(Long id);
+
+    List<Note>getAllByChannel_Id(Long id);
+
+    Note deleteNoteByChannel_IdAndUser_Id(Long channelId, Long userId);
 
 }
 

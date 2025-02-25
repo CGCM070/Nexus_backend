@@ -1,5 +1,6 @@
 package nexus_backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import nexus_backend.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,9 +28,11 @@ public class Invitation {
     private Timestamp expireAt;
 
     @ManyToOne
+    @JsonIgnore
     private User inviter;
 
     @ManyToOne
+    @JsonIgnore
     private Server server;
 
 }

@@ -1,5 +1,6 @@
 package nexus_backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -48,5 +49,6 @@ public class Server {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     @Builder.Default
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 }
