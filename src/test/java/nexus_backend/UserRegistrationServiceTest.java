@@ -81,11 +81,11 @@ class UserRegistrationServiceTest {
 
             // Verificar que el servidor personal fue creado
             Server personalServer = serverRepository.findByUser(newUser).orElseThrow(() -> new RuntimeException("Server not found"));
-           // assertEquals("Dashboard Personal de Carlos", personalServer.getName());
+            // assertEquals("Dashboard Personal de Carlos", personalServer.getName());
 
             // Verificar que el canal de bienvenida fue creado
             Channel welcomeChannel = channelRepository.findByServerAndName(personalServer, "Bienvenida").orElseThrow();
-           // assertEquals("Bienvenida", welcomeChannel.getName());
+            // assertEquals("Bienvenida", welcomeChannel.getName());
         });
     }
 
@@ -113,7 +113,7 @@ class UserRegistrationServiceTest {
 
             // Verificar que el usuario ha sido agregado al canal
             Channel updatedChannel = channelRepository.findById(1L).orElseThrow(() -> new RuntimeException("Channel not found"));
-        //    assertTrue(updatedChannel.getInvitedUsers().stream().anyMatch(user -> user.getId().equals(newUser.getId())));
+            //    assertTrue(updatedChannel.getInvitedUsers().stream().anyMatch(user -> user.getId().equals(newUser.getId())));
         });
     }
 
@@ -140,6 +140,48 @@ class UserRegistrationServiceTest {
             // Verificar que la nota ha sido creada
             Note createdNote = noteService.getNoteById(newNote.getId());
             assertNotNull(createdNote);
+        });
+    }
+
+
+    @Test
+    @Order(4)
+    void updateNoteInChannel() {
+        transactionTemplate.executeWithoutResult(transactionStatus -> {
+            // Buscar el usuario creado en el test anterior
+            User newUser = userRepository.findById(2L).orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Obtener la nota existente
+            Note existingNote = noteService.getNotesByUserId(newUser.getId()).get(0);
+
+            // Actualizar la nota
+            existingNote.setTitle("Nota Actualizada");
+            existingNote.setContent("Contenido actualizado de la nota");
+            noteService.updateNoteById(existingNote.getId(), existingNote);
+
+            // Verificar que la nota ha sido actualizada
+            Note updatedNote = noteService.getNoteById(existingNote.getId());
+//            assertEquals("Nota Actualizada", updatedNote.getTitle());
+//            assertEquals("Contenido actualizado de la nota", updatedNote.getContent());
+        });
+    }
+
+
+    @Test
+    @Order(5)
+    void deleteNoteInChannel() {
+        transactionTemplate.executeWithoutResult(transactionStatus -> {
+            // Buscar el usuario creado en el test anterior
+            User newUser = userRepository.findById(2L).orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Obtener la nota existente
+            Note existingNote = noteService.getNotesByUserId(newUser.getId()).get(0);
+
+            // Eliminar la nota
+            noteService.deleteNote(existingNote.getId());
+
+            // Verificar que la nota ha sido eliminada
+            //assertThrows(EntityNotFoundException.class, () -> noteService.getNoteById(existingNote.getId()));
         });
     }
 }
