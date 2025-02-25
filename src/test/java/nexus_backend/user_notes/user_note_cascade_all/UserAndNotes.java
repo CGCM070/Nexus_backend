@@ -211,8 +211,8 @@ class UserAndNotes {
 
         transactionTemplate.executeWithoutResult(transactionStatus -> {
 
-            User juan = userRepository.findById(3L).orElseThrow();
-            Note note = noteRepository.findById(4L).orElseThrow();
+            User juan = userRepository.findById(6L).orElseThrow();
+            Note note = noteRepository.findById(9L).orElseThrow();
             // En note tenemos el id del usuario
             note.setUser(juan);
 
