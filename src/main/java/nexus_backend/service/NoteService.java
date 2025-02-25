@@ -36,7 +36,7 @@ public class NoteService {
                 .orElseThrow(() -> new EntityNotFoundException(id , "Note"));
     }
 
-    public List<Note> getNotesByUser(Long userId) {
+    public List<Note> getNotesByUserId(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new EntityNotFoundException(userId , "User");
         }
@@ -47,15 +47,6 @@ public class NoteService {
     public Note createNote(Note note) {
         return noteRepository.save(note);
     }
-
-
-//    public Note createNoteForUser(Long userId, Note note) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new EntityNotFoundException(userId , "User"));
-//        note.setUser(user);
-//        return noteRepository.save(note);
-//
-//    }
 
     @Transactional
     public Note createNoteForUser(Long userId, Long channelId, Note note) {

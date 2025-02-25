@@ -52,7 +52,7 @@ public class NoteController {
     @GetMapping("/user/{userId}")
     public List<Note> getNotesByUserId(@PathVariable Long userId) {
         log.info("Fetching notes for user with ID: {}", userId);
-        return noteService.getNotesByUser(userId);
+        return noteService.getNotesByUserId(userId);
     }
 
 //    @PostMapping("/user/{userId}")
