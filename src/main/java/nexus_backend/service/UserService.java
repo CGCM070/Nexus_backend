@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import nexus_backend.domain.User;
 import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +13,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -30,19 +28,18 @@ public class UserService {
 
     public User findById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(id , "User"));
+                .orElseThrow(() -> new EntityNotFoundException(id, "User"));
     }
 
     public User updateUser(Long id, User user) {
-        return userRepository.findById(id).map(u -> (id.equals(user.getId()) ?
-                userRepository.save(user) : null))
-                .orElseThrow(() -> new EntityNotFoundException(id , "User"));
+        return userRepository.findById(id).map(u -> (id.equals(user.getId()) ? userRepository.save(user) : null))
+                .orElseThrow(() -> new EntityNotFoundException(id, "User"));
     }
 
     public void deleteUser(Long id) {
         userRepository.findById(id).map(u -> {
             userRepository.delete(u);
             return u;
-        }).orElseThrow(() -> new EntityNotFoundException(id , "User"));
+        }).orElseThrow(() -> new EntityNotFoundException(id, "User"));
     }
 }
