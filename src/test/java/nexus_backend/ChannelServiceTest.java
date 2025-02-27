@@ -140,7 +140,7 @@ public class ChannelServiceTest {
             User newUser = userRepository.findById(2L).orElseThrow(() -> new RuntimeException("User not found"));
 
             // Eliminar el usuario
-            channelService.removeUserFromChannel(2L, newUser.getId());
+            channelService.removeUserFromChannel(1L, newUser.getId());
             // Verificar que el usuario ha sido eliminado
             //assertThrows(EntityNotFoundException.class, () -> userRepository.findById(newUser.getId()));
         });
@@ -212,7 +212,7 @@ public class ChannelServiceTest {
                     // Actualizar el canal
                     existingChannel.setName("Canal Actualizado");
                     existingChannel.setDescription("Descripción actualizada del canal");
-                    channelService.updateChannel(existingChannel);
+                    channelService.updateChannel(existingChannel.getId() , existingChannel);
 
                     // Verificar que el canal ha sido actualizado
                     Channel updatedChannel = channelRepository.findById(existingChannel.getId()).orElseThrow(() -> new RuntimeException("Channel not found"));

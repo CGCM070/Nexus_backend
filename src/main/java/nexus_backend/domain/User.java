@@ -18,6 +18,7 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
+
 public class User {
 
     @Id
@@ -44,6 +45,7 @@ public class User {
 
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+
     private Server personalServer;
 
     @OneToMany(mappedBy = "invitedUser")

@@ -8,6 +8,7 @@ import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 @Service
@@ -22,9 +23,18 @@ public class ChannelService {
         this.userRepository = userRepository;
     }
 
+    public List<Channel> getAllChannels() {
+        return channelRepository.findAll();
+    }
+
+    public Channel getChannelById(Long id) {
+        return channelRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(id , "Channel"));
+    }
+
     @Transactional
-    public void createChannel(Channel channel) {
-        channelRepository.save(channel);
+    public Channel createChannel(Channel channel) {
+        return   channelRepository.save(channel);
     }
 
 
@@ -47,10 +57,20 @@ public class ChannelService {
     }
 
     @Transactional
-    public void updateChannel(Channel channel) {
-        channelRepository.save(channel);
-    }
+    public Channel updateChannel(Long id, Channel updatedChannel) {
+        Channel existingChannel = channelRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(id, "Channel"));
 
+        //nombre y descripción
+        if (updatedChannel.getName() != null) {
+            existingChannel.setName(updatedChannel.getName());
+        }
+        if (updatedChannel.getDescription() != null) {
+            existingChannel.setDescription(updatedChannel.getDescription());
+        }
+        return channelRepository.save(existingChannel);
+
+    }
     @Transactional
     public void deleteChannel(Long channelId) {
         Channel channel = channelRepository.findById(channelId).
