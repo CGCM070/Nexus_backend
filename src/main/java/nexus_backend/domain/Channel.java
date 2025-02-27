@@ -64,6 +64,7 @@ public class Channel {
     /**
      *  Este metodo retorna un Set de UserDTOs
      *  para evitar una serialización infinit
+     *  de los objetos User dentro de  Channel
      */
     @JsonProperty("invitedUsers")
     public Set<UserDTO> getInvitedUsersDTO() {

@@ -53,12 +53,6 @@ public class ChannelController {
         channelService.deleteChannel(id);
     }
 
-
-//    @PostMapping("/{channelId}/user/{userId}")
-//    public void inviteUserToChannel(@PathVariable Long channelId, @PathVariable Long userId) {
-//        log.info("Inviting user with ID: {} to channel with ID: {}", userId, channelId);
-//        channelService.inviteUserToChannel(channelId, userId);
-//    }
     @PostMapping("/{channelId}/user/{userId}")
     public void inviteUserToChannel(@PathVariable Long channelId, @PathVariable Long userId) {
         channelService.inviteUserToChannel(channelId, userId);

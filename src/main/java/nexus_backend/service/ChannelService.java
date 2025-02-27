@@ -82,6 +82,9 @@ public class ChannelService {
     }
 
 
+    //Devuelve los usuarios invitados a un canal en formato DTO
+    //Se usa en el controlador para devolver los usuarios invitados a un canal
+    //evitando la serialización de los objetos User
     @Transactional
     public Set<UserDTO> getChannelInvitedUsers(Long channelId) {
         Channel channel = channelRepository.findById(channelId)
