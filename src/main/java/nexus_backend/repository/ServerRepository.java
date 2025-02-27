@@ -9,5 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface ServerRepository  extends JpaRepository<Server, Long> {
+    // lo usamos en el test de UserRegistrationServiceTest
+    // verifica que se crea un servidor personal al registrar un usuario
     Optional<Server> findByUser(User user);
 }

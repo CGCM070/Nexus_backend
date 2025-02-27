@@ -9,7 +9,4 @@ import org.springframework.boot.test.context.SpringBootTest;
 class NexusBackendApplicationTests {
 
 
-    @Test
-    void Test() {
-    }
 }

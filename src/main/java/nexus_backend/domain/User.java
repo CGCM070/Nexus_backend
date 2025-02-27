@@ -43,9 +43,6 @@ public class User {
     private Timestamp updatedAt;
 
 
-//    @ManyToMany(mappedBy = "users")
-//    private Set<Server> servers;
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Server personalServer;
 

@@ -2,14 +2,14 @@ package nexus_backend.service;
 
 import jakarta.transaction.Transactional;
 import nexus_backend.domain.Channel;
-import nexus_backend.domain.Server;
 import nexus_backend.domain.User;
+import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.ServerRepository;
 import nexus_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+
 
 @Service
 public class ChannelService {
@@ -25,31 +25,39 @@ public class ChannelService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void createChannel(Channel channel) {
         channelRepository.save(channel);
     }
 
 
-
-    @Transactional
-    public Channel createChannel(Long serverId, String name, String description) {
-        Server server = serverRepository.findById(serverId).orElseThrow(() -> new RuntimeException("Server not found"));
-        Channel channel = Channel.builder()
-                .name(name)
-                .description(description)
-                .server(server)
-                .createdAt(new Timestamp(System.currentTimeMillis()))
-                .build();
-        return channelRepository.save(channel);
-    }
-
-
-
     @Transactional
     public void inviteUserToChannel(Long channelId, Long userId) {
-        Channel channel = channelRepository.findById(channelId).orElseThrow(() -> new RuntimeException("Channel not found"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Channel channel = channelRepository.findById(channelId).orElseThrow(() -> new EntityNotFoundException(channelId, " Channel not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(userId, "User not found"));
         channel.getInvitedUsers().add(user);
+    //    channelRepository.save(channel); channel es dueño de la relación por lo que no es necesario guardar
+    }
+
+    @Transactional
+    public void removeUserFromChannel(Long channelId, Long userId) {
+        Channel channel = channelRepository.findById(channelId).
+                orElseThrow(() -> new EntityNotFoundException(channelId, "Channel not found"));
+        User user = userRepository.findById(userId).
+                orElseThrow(() -> new EntityNotFoundException(userId, "User not found"));
+        channel.getInvitedUsers().remove(user);
+     //   channelRepository.save(channel); channel es dueño de la relación por lo que no es necesario guardar
+    }
+
+    @Transactional
+    public void updateChannel(Channel channel) {
         channelRepository.save(channel);
+    }
+
+    @Transactional
+    public void deleteChannel(Long channelId) {
+        Channel channel = channelRepository.findById(channelId).
+                orElseThrow(() -> new EntityNotFoundException(channelId, "Channel not found"));
+        channelRepository.delete(channel);
     }
 }

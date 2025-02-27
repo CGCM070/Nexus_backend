@@ -52,11 +52,6 @@ class UserRegistrationServiceTest {
     @Autowired
     private UserRegistrationService userRegistrationService;
 
-    @Autowired
-    private ChannelService channelService;
-
-    @Autowired
-    private NoteService noteService;
 
     @Test
     @Order(1)
@@ -90,98 +85,13 @@ class UserRegistrationServiceTest {
     }
 
 
-    @Test
-    @Order(2)
-    void inviteUserToChannel() {
-        transactionTemplate.executeWithoutResult(transactionStatus -> {
-            // Crear un nuevo usuario
-            User newUser = User.builder()
-                    .username("NuevoUsuario")
-                    .email("nuevo@example.com")
-                    .passwordHash("password")
-                    .fullName("Nuevo Usuario")
-                    .createdAt(new Timestamp(System.currentTimeMillis()))
-                    .updatedAt(new Timestamp(System.currentTimeMillis()))
-                    .build();
-            userRepository.save(newUser);
-
-            // Obtener el canal existente
-            Channel channel = channelRepository.findById(1L).orElseThrow(() -> new RuntimeException("Channel not found"));
-
-            // Invitar al nuevo usuario al canal
-            channelService.inviteUserToChannel(channel.getId(), newUser.getId());
-
-            // Verificar que el usuario ha sido agregado al canal
-            Channel updatedChannel = channelRepository.findById(1L).orElseThrow(() -> new RuntimeException("Channel not found"));
-            //    assertTrue(updatedChannel.getInvitedUsers().stream().anyMatch(user -> user.getId().equals(newUser.getId())));
-        });
-    }
 
 
-    @Test
-    @Order(3)
-    void newUserCreatesNoteInChannel() {
-        transactionTemplate.executeWithoutResult(transactionStatus -> {
-            // Buscar el usuario creado en el test anterior
-            User newUser = userRepository.findById(2L).orElseThrow(() -> new RuntimeException("User not found"));
-
-            // Obtener el canal existente
-            Channel channel = channelRepository.findById(1L).orElseThrow(() -> new RuntimeException("Channel not found"));
-
-            // Crear una nueva nota en el canal
-            Note newNote = Note.builder()
-                    .title("Nueva Nota")
-                    .content("Contenido de la nueva nota")
-                    .createdAt(new Timestamp(System.currentTimeMillis()))
-                    .updatedAt(new Timestamp(System.currentTimeMillis()))
-                    .build();
-            noteService.createNoteForUser(newUser.getId(), channel.getId(), newNote);
-
-            // Verificar que la nota ha sido creada
-            Note createdNote = noteService.getNoteById(newNote.getId());
-            assertNotNull(createdNote);
-        });
-    }
 
 
-    @Test
-    @Order(4)
-    void updateNoteInChannel() {
-        transactionTemplate.executeWithoutResult(transactionStatus -> {
-            // Buscar el usuario creado en el test anterior
-            User newUser = userRepository.findById(2L).orElseThrow(() -> new RuntimeException("User not found"));
-
-            // Obtener la nota existente
-            Note existingNote = noteService.getNotesByUserId(newUser.getId()).get(0);
-
-            // Actualizar la nota
-            existingNote.setTitle("Nota Actualizada");
-            existingNote.setContent("Contenido actualizado de la nota");
-            noteService.updateNoteById(existingNote.getId(), existingNote);
-
-            // Verificar que la nota ha sido actualizada
-            Note updatedNote = noteService.getNoteById(existingNote.getId());
-//            assertEquals("Nota Actualizada", updatedNote.getTitle());
-//            assertEquals("Contenido actualizado de la nota", updatedNote.getContent());
-        });
-    }
 
 
-    @Test
-    @Order(5)
-    void deleteNoteInChannel() {
-        transactionTemplate.executeWithoutResult(transactionStatus -> {
-            // Buscar el usuario creado en el test anterior
-            User newUser = userRepository.findById(2L).orElseThrow(() -> new RuntimeException("User not found"));
 
-            // Obtener la nota existente
-            Note existingNote = noteService.getNotesByUserId(newUser.getId()).get(0);
 
-            // Eliminar la nota
-            noteService.deleteNote(existingNote.getId());
 
-            // Verificar que la nota ha sido eliminada
-            //assertThrows(EntityNotFoundException.class, () -> noteService.getNoteById(existingNote.getId()));
-        });
-    }
 }

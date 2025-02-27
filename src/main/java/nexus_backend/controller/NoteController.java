@@ -55,12 +55,6 @@ public class NoteController {
         return noteService.getNotesByUserId(userId);
     }
 
-//    @PostMapping("/user/{userId}")
-//    public Note createNoteForUser(@PathVariable Long userId, @RequestBody Note note) {
-//        log.info("Creating note for user with ID: {}", userId);
-//        return noteService.createNoteForUser(userId, note);
-//    }
-
 
     @PutMapping("/{noteId}")
     public Note updateNote(@PathVariable Long noteId, @RequestBody Note note) {

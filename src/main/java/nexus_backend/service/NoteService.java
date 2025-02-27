@@ -43,6 +43,7 @@ public class NoteService {
         return noteRepository.findAllByUser_Id(userId);
     }
 
+    //no tiene sentido sin un canal asociado
     @Transactional
     public Note createNote(Note note) {
         return noteRepository.save(note);
