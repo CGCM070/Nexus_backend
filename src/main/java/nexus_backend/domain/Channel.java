@@ -2,12 +2,15 @@ package nexus_backend.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import nexus_backend.dto.UserDTO;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -54,6 +57,25 @@ public class Channel {
             joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @JsonIgnore
     private Set<User> invitedUsers = new HashSet<>();
+
+
+    /**
+     *  Este metodo retorna un Set de UserDTOs
+     *  para evitar una serialización infinit
+     */
+    @JsonProperty("invitedUsers")
+    public Set<UserDTO> getInvitedUsersDTO() {
+        return invitedUsers.stream()
+                .map(user -> new UserDTO(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getAvatarUrl(),
+                        user.getFullName()
+                ))
+                .collect(Collectors.toSet());
+    }
 
 }

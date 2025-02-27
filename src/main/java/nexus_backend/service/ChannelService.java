@@ -3,12 +3,14 @@ package nexus_backend.service;
 import jakarta.transaction.Transactional;
 import nexus_backend.domain.Channel;
 import nexus_backend.domain.User;
+import nexus_backend.dto.UserDTO;
 import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -40,10 +42,11 @@ public class ChannelService {
 
     @Transactional
     public void inviteUserToChannel(Long channelId, Long userId) {
-        Channel channel = channelRepository.findById(channelId).orElseThrow(() -> new EntityNotFoundException(channelId, " Channel not found"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(userId, "User not found"));
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new EntityNotFoundException(channelId, "Channel"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId, "User"));
         channel.getInvitedUsers().add(user);
-    //    channelRepository.save(channel); channel es dueño de la relación por lo que no es necesario guardar
     }
 
     @Transactional
@@ -76,5 +79,13 @@ public class ChannelService {
         Channel channel = channelRepository.findById(channelId).
                 orElseThrow(() -> new EntityNotFoundException(channelId, "Channel not found"));
         channelRepository.delete(channel);
+    }
+
+
+    @Transactional
+    public Set<UserDTO> getChannelInvitedUsers(Long channelId) {
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new EntityNotFoundException(channelId, "Channel"));
+        return channel.getInvitedUsersDTO();
     }
 }

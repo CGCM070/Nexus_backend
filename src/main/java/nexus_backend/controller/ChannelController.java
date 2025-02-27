@@ -2,10 +2,12 @@ package nexus_backend.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import nexus_backend.domain.Channel;
+import nexus_backend.dto.UserDTO;
 import nexus_backend.service.ChannelService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -52,16 +54,25 @@ public class ChannelController {
     }
 
 
+//    @PostMapping("/{channelId}/user/{userId}")
+//    public void inviteUserToChannel(@PathVariable Long channelId, @PathVariable Long userId) {
+//        log.info("Inviting user with ID: {} to channel with ID: {}", userId, channelId);
+//        channelService.inviteUserToChannel(channelId, userId);
+//    }
     @PostMapping("/{channelId}/user/{userId}")
     public void inviteUserToChannel(@PathVariable Long channelId, @PathVariable Long userId) {
-        log.info("Inviting user with ID: {} to channel with ID: {}", userId, channelId);
         channelService.inviteUserToChannel(channelId, userId);
     }
-
 
     @DeleteMapping("/{channelId}/remove/{userId}")
     public void removeUserFromChannel(@PathVariable Long channelId, @PathVariable Long userId) {
         log.info("Removing user with ID: {} from channel with ID: {}", userId, channelId);
         channelService.removeUserFromChannel(channelId, userId);
+    }
+
+
+    @GetMapping("/{channelId}/invited-users")
+    public Set<UserDTO> getChannelInvitedUsers(@PathVariable Long channelId) {
+        return channelService.getChannelInvitedUsers(channelId);
     }
 }
