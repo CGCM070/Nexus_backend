@@ -44,7 +44,7 @@ public class UserRegistrationService {
 
         // Crear canal de bienvenida
         Channel welcomeChannel = Channel.builder()
-                .name("Bienvenida")
+                .name("Bienvenido")
                 .description("Canal de bienvenida a tu espacio personal")
                 .server(personalDashboard)
                 .createdAt(new Timestamp(System.currentTimeMillis()))

@@ -5,7 +5,6 @@ import nexus_backend.domain.Channel;
 import nexus_backend.domain.User;
 import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.ChannelRepository;
-import nexus_backend.repository.ServerRepository;
 import nexus_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +14,11 @@ import org.springframework.stereotype.Service;
 public class ChannelService {
 
     private final ChannelRepository channelRepository;
-    private final ServerRepository serverRepository;
     private final UserRepository userRepository;
 
 
-    public ChannelService(ChannelRepository channelRepository, ServerRepository serverRepository, UserRepository userRepository) {
+    public ChannelService(ChannelRepository channelRepository, UserRepository userRepository) {
         this.channelRepository = channelRepository;
-        this.serverRepository = serverRepository;
         this.userRepository = userRepository;
     }
 

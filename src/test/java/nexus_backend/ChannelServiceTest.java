@@ -96,7 +96,7 @@ public class ChannelServiceTest {
             // User newUser = userRepository.findById(2L).orElseThrow(() -> new RuntimeException("User not found"));
 
             // Obtener el canal existente
-            Channel channel = channelRepository.findById(2L).orElseThrow(() -> new RuntimeException("Channel not found"));
+            Channel channel = channelRepository.findById(1L).orElseThrow(() -> new RuntimeException("Channel not found"));
 
             // Invitar al nuevo usuario al canal
             channelService.inviteUserToChannel(channel.getId(), newUser.getId());

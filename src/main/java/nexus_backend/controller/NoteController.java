@@ -37,6 +37,7 @@ public class NoteController {
         return noteService.createNoteForUser(userId, channelId, note);
     }
 
+    //no tiene sentido sin un canal asociado
     @PostMapping("")
     public Note createNote(@RequestBody Note note) {
         log.info("Creating new note");

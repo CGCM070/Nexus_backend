@@ -79,7 +79,7 @@ class UserRegistrationServiceTest {
             // assertEquals("Dashboard Personal de Carlos", personalServer.getName());
 
             // Verificar que el canal de bienvenida fue creado
-            Channel welcomeChannel = channelRepository.findByServerAndName(personalServer, "Bienvenida").orElseThrow();
+            Channel welcomeChannel = channelRepository.findByServerAndName(personalServer, "Bienvenido").orElseThrow();
             // assertEquals("Bienvenida", welcomeChannel.getName());
         });
     }
