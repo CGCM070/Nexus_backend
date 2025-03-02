@@ -3,7 +3,6 @@ package nexus_backend;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import nexus_backend.domain.Channel;
-import nexus_backend.domain.Note;
 import nexus_backend.domain.Server;
 import nexus_backend.domain.User;
 import nexus_backend.repository.ChannelRepository;
@@ -20,6 +19,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.sql.Timestamp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
@@ -65,30 +65,30 @@ class UserRegistrationServiceTest {
                     .updatedAt(new Timestamp(System.currentTimeMillis()))
                     .build();
 
-            User user2 = User.builder()
-                    .username("User2")
-                    .email("user@example.com")
-                    .passwordHash("password")
-                    .fullName("User2 Torres")
-                    .createdAt(new Timestamp(System.currentTimeMillis()))
-                    .updatedAt(new Timestamp(System.currentTimeMillis()))
-                    .build();
+//            User user2 = User.builder()
+//                    .username("User2")
+//                    .email("user@example.com")
+//                    .passwordHash("password")
+//                    .fullName("User2 Torres")
+//                    .createdAt(new Timestamp(System.currentTimeMillis()))
+//                    .updatedAt(new Timestamp(System.currentTimeMillis()))
+//                    .build();
 
             // Registrar el usuario y realizar el onboarding
             userRegistrationService.registerUser(user);
-            userRegistrationService.registerUser(user2);
+         //   userRegistrationService.registerUser(user2);
 
             // Verificar que el usuario fue creado
-           // User newUser = userRepository.findByEmail("dennis@example.com");
-            //assertNotNull(newUser.getId());
+            User newUser = userRepository.findByEmail("dennis@example.com");
+            assertNotNull(newUser.getId());
 
             // Verificar que el servidor personal fue creado
-            //Server personalServer = serverRepository.findByUser(newUser).orElseThrow(() -> new RuntimeException("Server not found"));
-            // assertEquals("Dashboard Personal de Carlos", personalServer.getName());
+            Server personalServer = serverRepository.findByUser(newUser).orElseThrow(() -> new RuntimeException("Server not found"));
+             assertEquals("Dashboard Personal de Dennis", personalServer.getName());
 
             // Verificar que el canal de bienvenida fue creado
-           // Channel welcomeChannel = channelRepository.findByServerAndName(personalServer, "Bienvenido").orElseThrow();
-            // assertEquals("Bienvenida", welcomeChannel.getName());
+            Channel welcomeChannel = channelRepository.findByServerAndName(personalServer, "Bienvenido").orElseThrow();
+             assertEquals("Bienvenido", welcomeChannel.getName());
         });
     }
 

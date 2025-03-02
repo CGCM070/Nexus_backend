@@ -129,10 +129,6 @@ class UserAndNotes {
     @Test
     @Order(2)
     void UnlinkUserNote_Whit_OrphanRemoveAndCascade() {
-        // Configuracion
-        // @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
-        // private Set<Note> notes = new HashSet<>();
-
         transactionTemplate.executeWithoutResult(transactionStatus -> {
 
             //busco al usuario
@@ -208,8 +204,8 @@ class UserAndNotes {
 
         transactionTemplate.executeWithoutResult(transactionStatus -> {
 
-            User juan = userRepository.findById(6L).orElseThrow();
-            Note note = noteRepository.findById(9L).orElseThrow();
+            User juan = userRepository.findById(3L).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            Note note = noteRepository.findById(4L).orElseThrow(() -> new RuntimeException("Nota no encontrada"));
             // En note tenemos el id del usuario
             note.setUser(juan);
 

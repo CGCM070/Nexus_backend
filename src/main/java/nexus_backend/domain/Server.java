@@ -41,18 +41,6 @@ public class Server {
     @Builder.Default
     private Set<Channel> channels = new HashSet<>();
 
-
-//    @ManyToMany
-//    @JoinTable(
-//            name = "server_user",
-//            joinColumns = @JoinColumn(name = "server_id"),
-//            inverseJoinColumns = @JoinColumn(name = "user_id")
-//    )
-//    @Builder.Default
-//    @JsonIgnore
-//    private Set<User> users = new HashSet<>();
-
-
     @OneToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
