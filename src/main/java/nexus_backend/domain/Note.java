@@ -32,11 +32,12 @@ public class Note {
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     private Channel channel;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     @JsonIgnore
+    @ToString.Exclude
     private User user;
 
 }

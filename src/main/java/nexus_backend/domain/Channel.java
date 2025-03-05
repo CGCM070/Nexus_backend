@@ -37,6 +37,7 @@ public class Channel {
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     private Server server;
 
     @OneToMany(mappedBy = "channel")
@@ -58,6 +59,7 @@ public class Channel {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     @JsonIgnore
+    @ToString.Exclude
     private Set<User> invitedUsers = new HashSet<>();
 
 

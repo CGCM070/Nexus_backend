@@ -50,26 +50,31 @@ public class User {
     @OneToMany(mappedBy = "invitedUser")
     @Builder.Default
     @JsonIgnore
+    @ToString.Exclude
     private Set<Invitation> invitations = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @JsonIgnore
+    @ToString.Exclude
     private List<Note> notes = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator")
     @Builder.Default
     @JsonIgnore
+    @ToString.Exclude
     private Set<Task> createdTasks = new HashSet<>();
 
     @OneToMany(mappedBy = "assignedTo")
     @Builder.Default
     @JsonIgnore
+    @ToString.Exclude
     private Set<Task> assignedTasks = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     @Builder.Default
     @JsonIgnore
+    @ToString.Exclude
     private Set<Message> messages = new HashSet<>();
 
 }

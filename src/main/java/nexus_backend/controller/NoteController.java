@@ -37,12 +37,12 @@ public class NoteController {
         return noteService.createNoteForUser(userId, channelId, note);
     }
 
-    //no tiene sentido sin un canal asociado
     @PostMapping("")
     public Note createNote(@RequestBody Note note) {
         log.info("Creating new note");
         return noteService.createNote(note);
     }
+
 
     @DeleteMapping("/{id}")
     public void deleteNote(@PathVariable Long id) {
@@ -69,6 +69,4 @@ public class NoteController {
         log.info("Fetching notes for channel with ID: {}", channelId);
         return noteService.getNotesByChannel(channelId);
     }
-
-
 }

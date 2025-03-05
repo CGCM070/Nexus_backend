@@ -27,17 +27,16 @@ public class Invitation {
 
     private Timestamp expireAt;
 
-//    @ManyToOne
-//    @JsonIgnore
-//    private User inviter;
 
     @ManyToOne
     @JoinColumn(name = "invited_user_id")
     @JsonIgnore
+    @ToString.Exclude
     private User invitedUser;
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     private Server server;
 
 }

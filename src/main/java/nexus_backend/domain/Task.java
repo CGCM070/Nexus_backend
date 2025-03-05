@@ -34,16 +34,19 @@ public class Task {
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     private Channel channel;
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     @JoinColumn(name = "creator_id")
     private User creator;
 
     @ManyToOne
     @JoinColumn(name = "assigned_to_id")
     @JsonIgnore
+    @ToString.Exclude
     private User assignedTo;
 
 }

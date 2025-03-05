@@ -31,10 +31,12 @@ public class Message {
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     private User user;
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     private Channel channel;
 
 

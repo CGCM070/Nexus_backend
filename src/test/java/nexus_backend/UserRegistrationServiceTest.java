@@ -65,18 +65,18 @@ class UserRegistrationServiceTest {
                     .updatedAt(new Timestamp(System.currentTimeMillis()))
                     .build();
 
-//            User user2 = User.builder()
-//                    .username("User2")
-//                    .email("user@example.com")
-//                    .passwordHash("password")
-//                    .fullName("User2 Torres")
-//                    .createdAt(new Timestamp(System.currentTimeMillis()))
-//                    .updatedAt(new Timestamp(System.currentTimeMillis()))
-//                    .build();
+            User user2 = User.builder()
+                    .username("User2")
+                    .email("user@example.com")
+                    .passwordHash("password")
+                    .fullName("User2 Torres")
+                    .createdAt(new Timestamp(System.currentTimeMillis()))
+                    .updatedAt(new Timestamp(System.currentTimeMillis()))
+                    .build();
 
             // Registrar el usuario y realizar el onboarding
             userRegistrationService.registerUser(user);
-         //   userRegistrationService.registerUser(user2);
+            userRegistrationService.registerUser(user2);
 
             // Verificar que el usuario fue creado
             User newUser = userRepository.findByEmail("dennis@example.com");
