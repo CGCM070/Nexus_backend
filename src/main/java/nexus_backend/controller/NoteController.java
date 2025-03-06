@@ -3,6 +3,8 @@ package nexus_backend.controller;
 import lombok.extern.slf4j.Slf4j;
 import nexus_backend.domain.Note;
 import nexus_backend.service.NoteService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +22,9 @@ public class NoteController {
     }
 
     @GetMapping("")
-    public List<Note> getAllNotes() {
+    public Page<Note> getAllNotes(Pageable pageable) {
         log.info("Fetching all notes");
-        return noteService.getAllNotes();
+        return noteService.getAllNotes(pageable);
     }
 
     @GetMapping("/{id}")

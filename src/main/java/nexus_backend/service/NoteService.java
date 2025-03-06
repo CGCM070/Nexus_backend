@@ -9,6 +9,8 @@ import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.NoteRepository;
 import nexus_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +29,8 @@ public class NoteService {
         this.channelRepository = channelRepository;
     }
 
-    public List<Note> getAllNotes() {
-        return noteRepository.findAll();
+    public Page<Note> getAllNotes(Pageable pageable) {
+        return noteRepository.findAll(pageable);
     }
 
     public Note getNoteById(Long id) {

@@ -134,7 +134,7 @@ class UserAndNotes {
             //busco al usuario
             User paco = userRepository.findById(2L).orElseThrow();
 
-            Note noteUnlink = paco.getNotes().iterator().next();
+            Note noteUnlink = paco.getNotes().getFirst();
             // con el orphanRemoval = true al setear a null el usuario de la nota
             // se elimina la nota
             noteUnlink.setUser(null);
@@ -156,7 +156,7 @@ class UserAndNotes {
         transactionTemplate.executeWithoutResult(transactionStatus -> {
 
             User user = userRepository.findById(1L).orElseThrow();
-            Note noteEliminar = user.getNotes().iterator().next();
+            Note noteEliminar = user.getNotes().getFirst();
 
             // ya no seteamos a null el usuario de la nota
             // sino que eliminamos la nota de la lista de notas del usuario
@@ -180,7 +180,7 @@ class UserAndNotes {
 
 
             //  Simular que el frontend nos envía el ID de la nota a eliminar
-            Long noteIdToDelete = marta.getNotes().iterator().next().getId();
+            Long noteIdToDelete = marta.getNotes().getFirst().getId();
 
             Note noteToRemove = marta.getNotes().stream()
                     .filter(note -> note.getId().equals(noteIdToDelete))
@@ -212,7 +212,7 @@ class UserAndNotes {
             // guardamos la nota
             noteRepository.save(note);
         });
-    };
+    }
 
 
     @Test
@@ -222,7 +222,7 @@ class UserAndNotes {
         transactionTemplate.executeWithoutResult(transactionStatus -> {
 
             User juan = userRepository.findById(3L).orElseThrow();
-            Note noteModificar = juan.getNotes().iterator().next();
+            Note noteModificar = juan.getNotes().getFirst();
             // Modificamos la nota
             noteModificar.setTitle("Nota modificada");
             noteModificar.setContent("Contenido modificado");
@@ -230,7 +230,7 @@ class UserAndNotes {
             // guardamos la nota del lado del cascade all y se propaga a la nota
             userRepository.save(juan);
         });
-    };
+    }
 
 
 }
