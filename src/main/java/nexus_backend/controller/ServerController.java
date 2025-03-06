@@ -36,11 +36,18 @@ public class ServerController {
         log.info("Fetching server for user with ID: {}", userId);
         return serverService.getServerByUserId(userId);
     }
+
     @PostMapping("")
     public Server createServer(@RequestBody Server server) {
         log.info("Creating new server");
         return serverService.createServer(server);
     }
+
+    @PostMapping("/{serverId}/user/{userId}")
+    public Server assignServerToUser(@PathVariable Long serverId, @PathVariable Long userId) {
+        return  serverService.assignServerToUser(serverId, userId);
+    }
+
 
     @PutMapping("/{id}")
     public Server updateServer(@PathVariable Long id, @RequestBody Server serverDetails) {

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -83,4 +84,19 @@ public class NoteService {
         return noteRepository.getAllByChannel_Id(channelId);
     }
 
+
+
+
+
+    @Transactional
+    public Note createWelcomeNoteForUser(User user, Channel channel) {
+        // Crear nota de bienvenida
+        Note welcomeNote = Note.builder()
+                .title("Bienvenido")
+                .content("¡ Tamos Ready ? !")
+                .createdAt(new Timestamp(System.currentTimeMillis()))
+                .build();
+
+        return createNoteForUser(user.getId(), channel.getId(), welcomeNote);
+    }
 }

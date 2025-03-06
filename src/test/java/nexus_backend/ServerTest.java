@@ -120,13 +120,22 @@ public class ServerTest {
     void deleteServer(){
         transactionTemplate.executeWithoutResult(transactionStatus -> {
             Server server = serverRepository.findById(1L).orElseThrow(() -> new RuntimeException("Server not found"));
-
             serverRepository.delete(server);
 
-//            Server deletedServer = serverRepository.findById(server.getId()).orElse(null);
-//
-//            assertEquals(null, deletedServer);
+
         });
     }
 
+    @Test
+    @Order(6)
+    void serverForUser() {
+        transactionTemplate.executeWithoutResult(transactionStatus -> {
+            Server server = serverRepository.findById(2L).orElseThrow(() -> new RuntimeException("Server not found"));
+            User user = userRepository.findById(2L).orElseThrow(() -> new RuntimeException("User not found"));
+            user.setPersonalServer(server);
+            server.setUser(user);
+            userRepository.save(user);
+            serverRepository.save(server);
+        });
+    }
 }

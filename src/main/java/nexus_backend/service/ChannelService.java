@@ -2,6 +2,7 @@ package nexus_backend.service;
 
 import jakarta.transaction.Transactional;
 import nexus_backend.domain.Channel;
+import nexus_backend.domain.Server;
 import nexus_backend.domain.User;
 import nexus_backend.dto.UserDTO;
 import nexus_backend.exception.EntityNotFoundException;
@@ -9,6 +10,7 @@ import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
@@ -90,5 +92,23 @@ public class ChannelService {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new EntityNotFoundException(channelId, "Channel"));
         return channel.getInvitedUsersDTO();
+    }
+
+
+
+
+
+
+    @Transactional
+    public Channel createDefaultChannelForServer(Server server) {
+        // Crear canal de bienvenida
+        Channel welcomeChannel = Channel.builder()
+                .name("Bienvenido")
+                .description("Canal de bienvenida a tu espacio personal")
+                .server(server)
+                .createdAt(new Timestamp(System.currentTimeMillis()))
+                .build();
+
+        return createChannel(welcomeChannel);
     }
 }

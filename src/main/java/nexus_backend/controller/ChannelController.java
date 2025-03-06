@@ -22,12 +22,6 @@ public class ChannelController {
         this.channelService = channelService;
     }
 
-    @GetMapping("")
-    public List<Channel> getAllChannels() {
-        log.info("Fetching all channels");
-        return channelService.getAllChannels();
-    }
-
     @GetMapping("/{id}")
     public Channel getChannelById( @PathVariable Long id) {
         log.info("Fetching channel with ID: {}", id);
@@ -38,6 +32,21 @@ public class ChannelController {
     public Channel createChannel(@RequestBody Channel channel) {
         log.info("Creating new channel");
         return channelService.createChannel(channel);
+    }
+    @PostMapping("/{channelId}/user/{userId}")
+    public void inviteUserToChannel(@PathVariable Long channelId, @PathVariable Long userId) {
+        channelService.inviteUserToChannel(channelId, userId);
+    }
+
+    @DeleteMapping("/{channelId}/remove/{userId}")
+    public void removeUserFromChannel(@PathVariable Long channelId, @PathVariable Long userId) {
+        log.info("Removing user with ID: {} from channel with ID: {}", userId, channelId);
+        channelService.removeUserFromChannel(channelId, userId);
+    }
+
+    @GetMapping("/{channelId}/invited-users")
+    public Set<UserDTO> getChannelInvitedUsers(@PathVariable Long channelId) {
+        return channelService.getChannelInvitedUsers(channelId);
     }
 
     @PutMapping("/{id}")
@@ -52,21 +61,10 @@ public class ChannelController {
         log.info("Deleting channel with ID: {}", id);
         channelService.deleteChannel(id);
     }
-
-    @PostMapping("/{channelId}/user/{userId}")
-    public void inviteUserToChannel(@PathVariable Long channelId, @PathVariable Long userId) {
-        channelService.inviteUserToChannel(channelId, userId);
+    @GetMapping("")
+    public List<Channel> getAllChannels() {
+        log.info("Fetching all channels");
+        return channelService.getAllChannels();
     }
 
-    @DeleteMapping("/{channelId}/remove/{userId}")
-    public void removeUserFromChannel(@PathVariable Long channelId, @PathVariable Long userId) {
-        log.info("Removing user with ID: {} from channel with ID: {}", userId, channelId);
-        channelService.removeUserFromChannel(channelId, userId);
-    }
-
-
-    @GetMapping("/{channelId}/invited-users")
-    public Set<UserDTO> getChannelInvitedUsers(@PathVariable Long channelId) {
-        return channelService.getChannelInvitedUsers(channelId);
-    }
 }
