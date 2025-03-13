@@ -43,35 +43,45 @@ public class User {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    // Corrigiendo la relación bidireccional, usando cascade pero sin orphanRemoval
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Server personalServer;
 
-    @OneToMany(mappedBy = "invitedUser")
+    // Cambiando configuración para evitar borrado en cascada de invitaciones
+    @OneToMany(mappedBy = "invitedUser", cascade = CascadeType.PERSIST)
     @Builder.Default
     @JsonIgnore
     @ToString.Exclude
     private Set<Invitation> invitations = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    // Relación faltante con los canales donde el usuario está invitado
+    @ManyToMany(mappedBy = "invitedUsers")
+    @Builder.Default
+    @JsonIgnore
+    @ToString.Exclude
+    private Set<Channel> invitedChannels = new HashSet<>();
+
+    // Mantener orphanRemoval solo para las entidades que son "propiedad" exclusiva del usuario
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @JsonIgnore
     @ToString.Exclude
     private List<Note> notes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "creator",cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @JsonIgnore
     @ToString.Exclude
     private Set<Task> createdTasks = new HashSet<>();
 
-    @OneToMany(mappedBy = "assignedTo")
+    // Las tareas asignadas no deberían eliminarse al eliminar un usuario
+    @OneToMany(mappedBy = "assignedTo", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Builder.Default
     @JsonIgnore
     @ToString.Exclude
     private Set<Task> assignedTasks = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @JsonIgnore
     @ToString.Exclude
