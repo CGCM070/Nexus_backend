@@ -66,10 +66,10 @@ class UserRegistrationServiceTest {
                     .build();
 
             User user2 = User.builder()
-                    .username("User2")
-                    .email("user@example.com")
+                    .username("Cesar")
+                    .email("cesar.gabriel.martinezs7@gmail.com")
                     .passwordHash("password")
-                    .fullName("User2 Torres")
+                    .fullName("cesar castillo")
                     .createdAt(new Timestamp(System.currentTimeMillis()))
                     .updatedAt(new Timestamp(System.currentTimeMillis()))
                     .build();
