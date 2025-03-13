@@ -47,12 +47,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Server personalServer;
 
-    // Cambiando configuración para evitar borrado en cascada de invitaciones
-    @OneToMany(mappedBy = "invitedUser", cascade = CascadeType.PERSIST)
-    @Builder.Default
-    @JsonIgnore
-    @ToString.Exclude
-    private Set<Invitation> invitations = new HashSet<>();
+
 
     // Relación faltante con los canales donde el usuario está invitado
     @ManyToMany(mappedBy = "invitedUsers")

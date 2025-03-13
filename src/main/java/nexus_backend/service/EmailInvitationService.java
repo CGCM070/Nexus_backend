@@ -100,6 +100,7 @@ public class EmailInvitationService {
         }
 
         // Añadir usuario al canal
+        invitation.setAccepted(true);
         channelService.inviteUserToChannel(invitation.getChannel().getId(), userId);
     }
 

@@ -33,10 +33,6 @@ public class Server {
 
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL)
-    @Builder.Default
-    private Set<Invitation> invitations = new HashSet<>();
-
     @OneToMany(mappedBy = "server")
     @Builder.Default
     private Set<Channel> channels = new HashSet<>();
