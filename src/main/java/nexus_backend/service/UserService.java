@@ -50,10 +50,6 @@ public class UserService {
                 channel.getInvitedUsers().remove(user));
         user.getInvitedChannels().clear();
 
-        // 2. Desconectar invitaciones
-        user.getInvitations().forEach(invitation ->
-                invitation.setInvitedUser(null));
-        user.getInvitations().clear();
 
         // 3. Desconectar tareas asignadas
         user.getAssignedTasks().forEach(task ->

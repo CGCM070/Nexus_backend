@@ -1,5 +1,6 @@
 package nexus_backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,8 +33,12 @@ public class EmailInvitation {
 
 
     @ManyToOne
+    @ToString.Exclude
+    @JsonIgnore
     private User user;
 
     @ManyToOne
+    @ToString.Exclude
+    @JsonIgnore
     private Channel channel;
 }

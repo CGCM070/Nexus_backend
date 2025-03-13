@@ -20,11 +20,13 @@ public class ChannelService {
 
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
+    private final MessageService messageService;
 
 
-    public ChannelService(ChannelRepository channelRepository, UserRepository userRepository) {
+    public ChannelService(ChannelRepository channelRepository, UserRepository userRepository,  MessageService messageService) {
         this.channelRepository = channelRepository;
         this.userRepository = userRepository;
+        this.messageService = messageService;
     }
 
     public List<Channel> getAllChannels() {
@@ -38,7 +40,10 @@ public class ChannelService {
 
     @Transactional
     public Channel createChannel(Channel channel) {
-        return   channelRepository.save(channel);
+        Channel savedChannel = channelRepository.save(channel);
+        // Crear cola para el canal
+        messageService.createChannelQueue(savedChannel.getId());
+        return savedChannel;
     }
 
 
@@ -80,6 +85,8 @@ public class ChannelService {
     public void deleteChannel(Long channelId) {
         Channel channel = channelRepository.findById(channelId).
                 orElseThrow(() -> new EntityNotFoundException(channelId, "Channel not found"));
+        // Eliminar la cola del canal
+        messageService.deleteChannelQueue(channelId);
         channelRepository.delete(channel);
     }
 
@@ -104,7 +111,6 @@ public class ChannelService {
                 .server(server)
                 .createdAt(new Timestamp(System.currentTimeMillis()))
                 .build();
-
         return createChannel(welcomeChannel);
     }
 }
