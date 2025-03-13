@@ -66,17 +66,16 @@ public class ServerService {
         serverRepository.delete(server);
     }
 
-    // Crear servidor personal
     @Transactional
     public Server createPersonalServerForUser(User user) {
-        // Crear servidor personal
+
         Server personalDashboard = Server.builder()
                 .name("Dashboard Personal de " + user.getUsername())
                 .description("Tu espacio personal en Nexus")
                 .createdAt(new Timestamp(System.currentTimeMillis()))
                 .build();
 
-        // Guardar y asignar al usuario
+        // Guardo y asigno al usuario
         Server savedServer = createServer(personalDashboard);
         assignServerToUser(user.getId(), savedServer.getId());
 

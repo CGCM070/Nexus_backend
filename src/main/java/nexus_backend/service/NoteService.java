@@ -69,6 +69,7 @@ public class NoteService {
                 .orElseThrow(() -> new EntityNotFoundException(noteId , "Note"));
         existingNote.setTitle(note.getTitle());
         existingNote.setContent(note.getContent());
+        existingNote.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         return noteRepository.save(existingNote);
     }
 
@@ -90,7 +91,6 @@ public class NoteService {
 
     @Transactional
     public Note createWelcomeNoteForUser(User user, Channel channel) {
-        // Crear nota de bienvenida
         Note welcomeNote = Note.builder()
                 .title("Bienvenido")
                 .content("¡ Tamos Ready ? !")

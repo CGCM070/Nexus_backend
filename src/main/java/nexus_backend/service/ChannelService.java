@@ -95,13 +95,9 @@ public class ChannelService {
     }
 
 
-
-
-
-
     @Transactional
     public Channel createDefaultChannelForServer(Server server) {
-        // Crear canal de bienvenida
+
         Channel welcomeChannel = Channel.builder()
                 .name("Bienvenido")
                 .description("Canal de bienvenida a tu espacio personal")

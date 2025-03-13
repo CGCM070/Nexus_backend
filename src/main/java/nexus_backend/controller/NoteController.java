@@ -27,16 +27,10 @@ public class NoteController {
         return noteService.getAllNotes(pageable);
     }
 
-    @GetMapping("/{id}")
-    public Note getNoteById(@PathVariable Long id) {
-        log.info("Fetching note with ID: {}", id);
-        return noteService.getNoteById(id);
-    }
-
-    @PostMapping("/user/{userId}/channel/{channelId}")
-    public Note createNoteForUser(@PathVariable Long userId, @PathVariable Long channelId, @RequestBody Note note) {
-        log.info("Creating note for user with ID: {} in channel with ID: {}", userId, channelId);
-        return noteService.createNoteForUser(userId, channelId, note);
+    @GetMapping("/user/{userId}")
+    public List<Note> getNotesByUserId(@PathVariable Long userId) {
+        log.info("Fetching notes for user with ID: {}", userId);
+        return noteService.getNotesByUserId(userId);
     }
 
     @PostMapping("")
@@ -45,6 +39,17 @@ public class NoteController {
         return noteService.createNote(note);
     }
 
+    @PostMapping("/user/{userId}/channel/{channelId}")
+    public Note createNoteForUser(@PathVariable Long userId, @PathVariable Long channelId, @RequestBody Note note) {
+        log.info("Creating note for user with ID: {} in channel with ID: {}", userId, channelId);
+        return noteService.createNoteForUser(userId, channelId, note);
+    }
+
+    @GetMapping("/channel/{channelId}")
+    public List<Note> getNotesByChannel(@PathVariable Long channelId) {
+        log.info("Fetching notes for channel with ID: {}", channelId);
+        return noteService.getNotesByChannel(channelId);
+    }
 
     @DeleteMapping("/{id}")
     public void deleteNote(@PathVariable Long id) {
@@ -52,10 +57,10 @@ public class NoteController {
         noteService.deleteNote(id);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<Note> getNotesByUserId(@PathVariable Long userId) {
-        log.info("Fetching notes for user with ID: {}", userId);
-        return noteService.getNotesByUserId(userId);
+    @GetMapping("/{id}")
+    public Note getNoteById(@PathVariable Long id) {
+        log.info("Fetching note with ID: {}", id);
+        return noteService.getNoteById(id);
     }
 
 
@@ -66,9 +71,5 @@ public class NoteController {
     }
 
 
-    @GetMapping("/channel/{channelId}")
-    public List<Note> getNotesByChannel(@PathVariable Long channelId) {
-        log.info("Fetching notes for channel with ID: {}", channelId);
-        return noteService.getNotesByChannel(channelId);
-    }
+
 }
