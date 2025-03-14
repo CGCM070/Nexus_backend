@@ -67,6 +67,16 @@ public class MessageService {
      */
     @Transactional
     public Message saveMessage(User user, Channel channel, String content) {
+
+        // Verificar que el usuario está invitado al canal o es el propietario del servidor
+        boolean isServerOwner = channel.getServer().getUser() != null &&
+                                channel.getServer().getUser().getId().equals(user.getId());
+        boolean isInvited = channel.getInvitedUsers().contains(user);
+
+        if (!isServerOwner && !isInvited) {
+            throw new RuntimeException("El usuario no tiene permiso para enviar mensajes a este canal");
+        }
+
         Message message = Message.builder()
                 .content(content)
                 .createdAt(new Timestamp(System.currentTimeMillis()))
