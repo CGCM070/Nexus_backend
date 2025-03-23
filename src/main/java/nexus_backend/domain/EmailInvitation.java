@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import nexus_backend.enums.EChannelRole;
 
 import java.sql.Timestamp;
 
@@ -32,7 +33,8 @@ public class EmailInvitation {
     private Timestamp expireAt;
 
     private boolean accepted;
-
+    @Enumerated(EnumType.STRING)
+    private EChannelRole role;
 
     @ManyToOne
     @ToString.Exclude

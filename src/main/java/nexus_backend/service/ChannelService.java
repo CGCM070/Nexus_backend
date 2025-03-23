@@ -2,11 +2,14 @@ package nexus_backend.service;
 
 import jakarta.transaction.Transactional;
 import nexus_backend.domain.Channel;
+import nexus_backend.domain.ChannelUserRole;
 import nexus_backend.domain.Server;
 import nexus_backend.domain.User;
 import nexus_backend.dto.UserDTO;
+import nexus_backend.enums.EChannelRole;
 import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.ChannelRepository;
+import nexus_backend.repository.ChannelUserRoleRepository;
 import nexus_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +24,16 @@ public class ChannelService {
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
     private final MessageService messageService;
+    private ChannelUserRoleRepository channelUserRoleRepository;
 
 
-    public ChannelService(ChannelRepository channelRepository, UserRepository userRepository,  MessageService messageService) {
+    public ChannelService(ChannelRepository channelRepository, UserRepository userRepository,
+                          MessageService messageService,
+                          ChannelUserRoleRepository channelUserRoleRepository) {
         this.channelRepository = channelRepository;
         this.userRepository = userRepository;
         this.messageService = messageService;
+        this.channelUserRoleRepository = channelUserRoleRepository;
     }
 
     public List<Channel> getAllChannels() {
@@ -45,7 +52,28 @@ public class ChannelService {
         messageService.createChannelQueue(savedChannel.getId());
         return savedChannel;
     }
+    // Añadir método para invitar con rol específico
+    @Transactional
+    public void inviteUserToChannel(Long channelId, Long userId, EChannelRole role) {
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new EntityNotFoundException(channelId, "Channel"));
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId, "User"));
+
+        // Añadir usuario a invitados
+        channel.getInvitedUsers().add(user);
+        channelRepository.save(channel);
+
+        // Crear relación con rol
+        ChannelUserRole channelUserRole = ChannelUserRole.builder()
+                .channel(channel)
+                .user(user)
+                .role(role)
+                .build();
+
+        channelUserRoleRepository.save(channelUserRole);
+    }
 
     @Transactional
     public void inviteUserToChannel(Long channelId, Long userId) {

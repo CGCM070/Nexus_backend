@@ -3,7 +3,9 @@ package nexus_backend.controller;
 import lombok.extern.slf4j.Slf4j;
 import nexus_backend.domain.Channel;
 import nexus_backend.dto.UserDTO;
+import nexus_backend.enums.EChannelRole;
 import nexus_backend.service.ChannelService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,22 +24,26 @@ public class ChannelController {
         this.channelService = channelService;
     }
 
+
     @GetMapping("/{id}")
     public Channel getChannelById( @PathVariable Long id) {
         log.info("Fetching channel with ID: {}", id);
         return channelService.getChannelById(id);
     }
 
+    @PreAuthorize("@securityService.canManageChannel(#channel.server.id)")
     @PostMapping("")
     public Channel createChannel(@RequestBody Channel channel) {
         log.info("Creating new channel");
         return channelService.createChannel(channel);
     }
+    @PreAuthorize("@securityService.canManageChannel(#channelId)")
     @PostMapping("/{channelId}/user/{userId}")
     public void inviteUserToChannel(@PathVariable Long channelId, @PathVariable Long userId) {
-        channelService.inviteUserToChannel(channelId, userId);
+        channelService.inviteUserToChannel(channelId, userId, EChannelRole.MEMBER);
     }
 
+    @PreAuthorize("@securityService.canManageChannel(#channelId)")
     @DeleteMapping("/{channelId}/remove/{userId}")
     public void removeUserFromChannel(@PathVariable Long channelId, @PathVariable Long userId) {
         log.info("Removing user with ID: {} from channel with ID: {}", userId, channelId);
@@ -49,6 +55,7 @@ public class ChannelController {
         return channelService.getChannelInvitedUsers(channelId);
     }
 
+    @PreAuthorize("@securityService.canManageChannel(#id)")
     @PutMapping("/{id}")
     public Channel updateChannel(@PathVariable Long id, @RequestBody Channel channel) {
         log.info("Updating channel with ID: {}", id);
@@ -56,11 +63,13 @@ public class ChannelController {
         return channelService.updateChannel(channel.getId(), channel);
     }
 
+    @PreAuthorize("@securityService.canManageChannel(#id)")
     @DeleteMapping("/{id}")
     public void deleteChannel(@PathVariable Long id) {
         log.info("Deleting channel with ID: {}", id);
         channelService.deleteChannel(id);
     }
+
     @GetMapping("")
     public List<Channel> getAllChannels() {
         log.info("Fetching all channels");

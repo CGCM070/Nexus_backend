@@ -5,6 +5,7 @@ import nexus_backend.domain.Note;
 import nexus_backend.service.NoteService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,24 +40,25 @@ public class NoteController {
         return noteService.createNote(note);
     }
 
+    @PreAuthorize("@securityService.canManageChannel(#channelId)")
     @PostMapping("/user/{userId}/channel/{channelId}")
     public Note createNoteForUser(@PathVariable Long userId, @PathVariable Long channelId, @RequestBody Note note) {
         log.info("Creating note for user with ID: {} in channel with ID: {}", userId, channelId);
         return noteService.createNoteForUser(userId, channelId, note);
     }
 
+
     @GetMapping("/channel/{channelId}")
     public List<Note> getNotesByChannel(@PathVariable Long channelId) {
-        log.info("Fetching notes for channel with ID: {}", channelId);
         return noteService.getNotesByChannel(channelId);
     }
 
+
+    @PreAuthorize("@securityService.canModifyResource(#id, 'note')")
     @DeleteMapping("/{id}")
     public void deleteNote(@PathVariable Long id) {
-        log.info("Deleting note with ID: {}", id);
         noteService.deleteNote(id);
     }
-
     @GetMapping("/{id}")
     public Note getNoteById(@PathVariable Long id) {
         log.info("Fetching note with ID: {}", id);
@@ -64,6 +66,7 @@ public class NoteController {
     }
 
 
+    @PreAuthorize("@securityService.canModifyResource(#noteId, 'note')")
     @PutMapping("/{noteId}")
     public Note updateNote(@PathVariable Long noteId, @RequestBody Note note) {
         log.info("Updating note with ID: {}", noteId);

@@ -2,6 +2,7 @@ package nexus_backend.controller;
 
 import lombok.AllArgsConstructor;
 import nexus_backend.domain.EmailInvitation;
+import nexus_backend.enums.EChannelRole;
 import nexus_backend.service.EmailInvitationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,16 +22,19 @@ public class EmailInvitationController {
     public ResponseEntity<Map<String, String>> sendInvitationEmail(
             @RequestParam Long inviterId,
             @RequestParam Long channelId,
-            @RequestParam String email) {
-        emailInvitationService.sendInvitationEmail(inviterId, channelId, email);
-        return ResponseEntity.ok(Map.of("message", "Invitación enviada"));
-    }
+            @RequestParam String email,
+            @RequestParam(defaultValue = "MEMBER") EChannelRole role) {
 
+        emailInvitationService.sendInvitationEmail(inviterId, channelId, email, role);
+        return ResponseEntity.ok(Map.of("message", "Invitación enviada con rol: " + role));
+    }
     @PostMapping("/accept")
     public ResponseEntity<Map<String, String>> acceptInvitation(
             @RequestParam String token,
             @RequestParam Long userId) {
+
         emailInvitationService.acceptInvitation(token, userId);
+
         return ResponseEntity.ok(Map.of("message", "Invitación aceptada"));
     }
 

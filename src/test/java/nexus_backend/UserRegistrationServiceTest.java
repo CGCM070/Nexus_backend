@@ -119,6 +119,8 @@ class UserRegistrationServiceTest {
             // Verificar canal de bienvenida
             Channel welcomeChannel = channelRepository.findByServerAndName(personalServer, "Bienvenido").orElseThrow();
             assertEquals("Bienvenido", welcomeChannel.getName());
+
+
         });
     }
 }

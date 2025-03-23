@@ -9,6 +9,7 @@ import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.UserRepository;
 import nexus_backend.service.MessageService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class MessageController {
     private final UserRepository userRepository;
     private final ChannelRepository channelRepository;
 
+    @PreAuthorize("@securityService.canAccessChannel(#channelId)")
     @GetMapping("/channel/{channelId}")
     public List<MessageDTO> getChannelMessages(@PathVariable Long channelId) {
         return messageService.getMessagesByChannelId(channelId).stream()
@@ -32,6 +34,7 @@ public class MessageController {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("@securityService.canAccessChannel(#channelId)")
     @PostMapping("/channel/{channelId}")
     public MessageDTO sendMessage(
             @PathVariable Long channelId,

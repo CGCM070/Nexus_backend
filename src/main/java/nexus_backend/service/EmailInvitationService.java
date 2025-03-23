@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import nexus_backend.domain.Channel;
 import nexus_backend.domain.EmailInvitation;
 import nexus_backend.domain.User;
+import nexus_backend.enums.EChannelRole;
 import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.EmailInvitationRepository;
@@ -29,7 +30,7 @@ public class EmailInvitationService {
 
 
     @Transactional
-    public void sendInvitationEmail(Long inviterId, Long channelId, String toEmail) {
+    public void sendInvitationEmail(Long inviterId, Long channelId, String toEmail,EChannelRole role) {
         User inviter = userRepository.findById(inviterId)
                 .orElseThrow(() -> new EntityNotFoundException(inviterId, "User"));
 
@@ -51,7 +52,7 @@ public class EmailInvitationService {
         //Generar token
         String token = UUID.randomUUID().toString();
 
-        //Crear invitación
+        // Crear invitación con rol
         EmailInvitation invitation = EmailInvitation.builder()
                 .email(toEmail)
                 .token(token)
@@ -60,6 +61,7 @@ public class EmailInvitationService {
                 .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                 .expireAt(Timestamp.valueOf(LocalDateTime.now().plus(7, ChronoUnit.DAYS)))
                 .accepted(false)
+                .role(role) // Guardar el rol asignado
                 .build();
 
         emailInvitationRepository.save(invitation);
@@ -100,8 +102,15 @@ public class EmailInvitationService {
         }
 
         // Añadir usuario al canal
+
+        // Esto debería llamar a la versión del método que asigna un rol
+        channelService.inviteUserToChannel(
+                invitation.getChannel().getId(),
+                userId,
+                invitation.getRole()
+        );
+
         invitation.setAccepted(true);
-        channelService.inviteUserToChannel(invitation.getChannel().getId(), userId);
     }
 
     public List<EmailInvitation> getPendingInvitations(String email) {
