@@ -24,12 +24,12 @@ public class ServerController {
         this.serverService = serverService;
         this.serverRepository = serverRepository;
     }
-
+/*
     @GetMapping("")
     public List<Server> getAllServers() {
         log.info("Fetching all servers");
         return serverService.getAllServers();
-    }
+    }*/
 
     @GetMapping("/{id}")
     public Server getServerById(@PathVariable Long id) {

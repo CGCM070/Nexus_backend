@@ -36,6 +36,14 @@ public boolean canAccessChannel(Long channelId) {
 }
 
 ```
+### **SecurityService**
+Proporciona métodos para verificar los permisos:
+- `canManageChannel`: Verifica si un usuario puede administrar un canal (OWNER, ADMIN).
+- `canAccessChannel`: Verifica si un usuario puede acceder a un canal (cualquier rol).
+- `canModifyResource`: Verifica si un usuario puede modificar un recurso específico (notas, mensajes).
+- `isServerOwner`: Verifica si un usuario es el propietario de un servidor.
+
+
 ### Registro e Inicialización
 Usuario se registra → Se crea User → Se crea Server personal. Se crea un Channel de bienvenida → Se asigna rol OWNER. Se crea una nota de bienvenida.
 
