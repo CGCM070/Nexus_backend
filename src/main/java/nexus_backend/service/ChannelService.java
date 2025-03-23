@@ -52,6 +52,8 @@ public class ChannelService {
         messageService.createChannelQueue(savedChannel.getId());
         return savedChannel;
     }
+
+
     // Añadir método para invitar con rol específico
     @Transactional
     public void inviteUserToChannel(Long channelId, Long userId, EChannelRole role) {

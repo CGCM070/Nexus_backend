@@ -24,25 +24,30 @@ public class ChannelController {
         this.channelService = channelService;
     }
 
-
+    // Ver canal: cualquier miembro invitado
+    @PreAuthorize("@securityService.canAccessChannel(#id)")
     @GetMapping("/{id}")
-    public Channel getChannelById( @PathVariable Long id) {
+    public Channel getChannelById(@PathVariable Long id) {
         log.info("Fetching channel with ID: {}", id);
         return channelService.getChannelById(id);
     }
 
+    // Crear canal: solo owner del servidor
     @PreAuthorize("@securityService.canManageChannel(#channel.server.id)")
     @PostMapping("")
     public Channel createChannel(@RequestBody Channel channel) {
         log.info("Creating new channel");
         return channelService.createChannel(channel);
     }
+/*
+    // Invitar usuario: solo admin/owner del canal
     @PreAuthorize("@securityService.canManageChannel(#channelId)")
     @PostMapping("/{channelId}/user/{userId}")
     public void inviteUserToChannel(@PathVariable Long channelId, @PathVariable Long userId) {
         channelService.inviteUserToChannel(channelId, userId, EChannelRole.MEMBER);
     }
-
+*/
+    // Eliminar usuario: solo admin/owner del canal
     @PreAuthorize("@securityService.canManageChannel(#channelId)")
     @DeleteMapping("/{channelId}/remove/{userId}")
     public void removeUserFromChannel(@PathVariable Long channelId, @PathVariable Long userId) {
@@ -50,11 +55,14 @@ public class ChannelController {
         channelService.removeUserFromChannel(channelId, userId);
     }
 
+    // Ver usuarios invitados: cualquier miembro
+    @PreAuthorize("@securityService.canAccessChannel(#channelId)")
     @GetMapping("/{channelId}/invited-users")
     public Set<UserDTO> getChannelInvitedUsers(@PathVariable Long channelId) {
         return channelService.getChannelInvitedUsers(channelId);
     }
 
+    // Eliminar canal: solo owner del servidor
     @PreAuthorize("@securityService.canManageChannel(#id)")
     @PutMapping("/{id}")
     public Channel updateChannel(@PathVariable Long id, @RequestBody Channel channel) {

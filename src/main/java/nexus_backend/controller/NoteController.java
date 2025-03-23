@@ -40,14 +40,17 @@ public class NoteController {
         return noteService.createNote(note);
     }
 
-    @PreAuthorize("@securityService.canManageChannel(#channelId)")
+    // Crear nota en canal: cualquier miembro
+    @PreAuthorize("@securityService.canAccessChannel(#channelId)")
+   // @PreAuthorize("@securityService.canManageChannel(#channelId)")
     @PostMapping("/user/{userId}/channel/{channelId}")
     public Note createNoteForUser(@PathVariable Long userId, @PathVariable Long channelId, @RequestBody Note note) {
         log.info("Creating note for user with ID: {} in channel with ID: {}", userId, channelId);
         return noteService.createNoteForUser(userId, channelId, note);
     }
 
-
+    // Listar notas por canal: cualquier miembro
+    @PreAuthorize("@securityService.canAccessChannel(#channelId)")
     @GetMapping("/channel/{channelId}")
     public List<Note> getNotesByChannel(@PathVariable Long channelId) {
         return noteService.getNotesByChannel(channelId);

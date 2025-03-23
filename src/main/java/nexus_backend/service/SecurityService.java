@@ -30,35 +30,32 @@ public class SecurityService {
     // Para verificar si el usuario puede administrar un canal (OWNER o ADMIN)
     public boolean canManageChannel(Long channelId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        String email = auth.getName();
 
-        // Verificar si tiene rol OWNER o ADMIN en el canal
-        boolean hasRole = channelUserRoleRepository.findByChannelIdAndUserUsername(channelId, username)
+        // Usar email en lugar de username
+        boolean hasRole = channelUserRoleRepository.findByChannelIdAndUserEmail(channelId, email)
                 .map(role -> role.getRole() == EChannelRole.OWNER || role.getRole() == EChannelRole.ADMIN)
                 .orElse(false);
 
-        if (hasRole) {
-            return true;
-        }
+        if (hasRole) return true;
 
-        // Verificar si es propietario del servidor que contiene el canal
+        // También actualizar esta verificación
         return channelRepository.findById(channelId)
                 .map(channel -> {
                     User serverOwner = channel.getServer().getUser();
-                    return serverOwner != null && serverOwner.getUsername().equals(username);
+                    return serverOwner != null && serverOwner.getEmail().equals(email);
                 })
                 .orElse(false);
     }
     public boolean canAccessChannel(Long channelId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        String email = auth.getName();
 
-        // Verificar si el usuario tiene un rol válido en el canal (ADMIN o OWNER)
-        return channelUserRoleRepository.findByChannelIdAndUserUsername(channelId, username)
+        // Actualizar a email en lugar de username
+        return channelUserRoleRepository.findByChannelIdAndUserEmail(channelId, email)
                 .map(role -> role.getRole() == EChannelRole.OWNER || role.getRole() == EChannelRole.ADMIN || role.getRole() == EChannelRole.MEMBER)
                 .orElse(false);
     }
-
 
     // Para verificar si puede modificar recursos específicos
     public boolean canModifyResource(Long resourceId, String resourceType) {
@@ -79,8 +76,8 @@ public class SecurityService {
     }
 
     private User getUserFromAuth(Authentication auth) {
-        String username = auth.getName();
-        return userRepository.findByUsername(username)
+        String email = auth.getName(); // auth.getName() devuelve el email
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 }
