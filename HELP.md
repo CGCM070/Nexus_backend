@@ -12,7 +12,7 @@
 **Server:** Espacio personal para cada usuario con múltiples canales.  
 **Channel:** Contenedor de comunicación con mensajes, notas y tareas.  
 **Message:** Comunicación en tiempo real vía WebSockets/RabbitMQ.  
-**Note/Task:** Contenido persistente en canales.
+**Note/Task/Message:** Contenido persistente en canales.
 
 ### Nexus implementa un sofisticado sistema de seguridad con dos niveles:
 
