@@ -2,6 +2,7 @@ package nexus_backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -22,6 +23,7 @@ public class Message {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @NotBlank
     private String content;
 
     private Timestamp createdAt;

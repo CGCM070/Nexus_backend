@@ -3,6 +3,7 @@ package nexus_backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -22,6 +23,7 @@ public class Note {
     private Long id;
 
     @Column(length = 45)
+    @NotBlank
     private String title;
 
     private String content;

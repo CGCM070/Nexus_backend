@@ -2,6 +2,7 @@ package nexus_backend.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import nexus_backend.enums.ERol;
 
 import java.sql.Timestamp;
 @Data
@@ -18,8 +19,8 @@ public class Rol {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(length = 20)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private ERol rol;
 
     private Timestamp createdAt;
     private Timestamp updatedAt;

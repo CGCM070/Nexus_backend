@@ -4,6 +4,7 @@ package nexus_backend.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import nexus_backend.dto.UserDTO;
 
@@ -27,7 +28,7 @@ public class Channel {
     @EqualsAndHashCode.Include
     private Long id;
 
-
+    @NotBlank
     private String name;
 
     @Column(length = 100)

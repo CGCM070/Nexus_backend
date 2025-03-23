@@ -2,6 +2,7 @@ package nexus_backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -20,6 +21,7 @@ public class EmailInvitation {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @NotBlank
     private String email;
 
     @Column(unique = true)

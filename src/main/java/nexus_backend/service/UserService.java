@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+
 @AllArgsConstructor
 @Service
 public class UserService {
@@ -34,7 +36,9 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(id, "User"));
     }
-
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
     public User updateUser(Long id, User user) {
         return userRepository.findById(id).map(u -> (id.equals(user.getId()) ? userRepository.save(user) : null))
                 .orElseThrow(() -> new EntityNotFoundException(id, "User"));

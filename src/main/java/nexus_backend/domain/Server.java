@@ -2,6 +2,7 @@ package nexus_backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -24,6 +25,7 @@ public class Server {
 
 
     @Column(length = 45)
+    @NotBlank
     private String name;
 
     @Column(length = 45)

@@ -2,7 +2,9 @@ package nexus_backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import nexus_backend.enums.ERol;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank
     private String passwordHash;
 
     @Column(length = 100)
@@ -82,4 +85,10 @@ public class User {
     @ToString.Exclude
     private Set<Message> messages = new HashSet<>();
 
+
+    @ElementCollection(targetClass = ERol.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private Set<ERol> roles = new HashSet<>();
 }
