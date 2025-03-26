@@ -45,7 +45,9 @@ Proporciona métodos para verificar los permisos:
 
 
 ### Registro e Inicialización
-Usuario se registra → Se crea User → Se crea Server personal. Se crea un Channel de bienvenida → Se asigna rol OWNER. Se crea una nota de bienvenida.
+Usuario se registra → Se crea User → Se crea Server personal. Se crea un Channel de bienvenida → Se asigna rol OWNER.
+Se crea una nota de bienvenida,
+todo orquestrado por ***UserRegistrationService***.
 
 ###  Implementación en UserRegistrationService:
 
