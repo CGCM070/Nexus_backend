@@ -2,6 +2,7 @@ package nexus_backend.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,6 +39,27 @@ public class GeneralControllerAdvice {
         errorResponse.put("message", ex.getMessage());
         errorResponse.put("path", request.getRequestURI());
         errorResponse.put("timestamp", LocalDateTime.now());
+        return errorResponse;
+    }
+
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Map<String, Object> handleAuthenticationException(AuthenticationException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", HttpStatus.UNAUTHORIZED.value());
+        errorResponse.put("error", "Error de autenticación");
+        errorResponse.put("message", "Credenciales incorrectas");
+        return errorResponse;
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
+        errorResponse.put("error", "Error de validación");
+        errorResponse.put("message", ex.getMessage());
         return errorResponse;
     }
 }

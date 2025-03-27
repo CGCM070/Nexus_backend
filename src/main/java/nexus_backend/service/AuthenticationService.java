@@ -30,9 +30,14 @@ public class AuthenticationService {
 
     @Transactional
     public AuthResponseDTO register(RegisterRequestDTO request) {
+        // Verificar si el usuario ya existe
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new RuntimeException("Email ya registrado");
+        }
+
         // Crear usuario con roles
         Set<ERol> roles = new HashSet<>();
-        roles.add(ERol.ROL_USER);
+        roles.add(ERol.ROL_ADMIN);
 
         User newUser = User.builder()
                 .username(request.getUsername())
