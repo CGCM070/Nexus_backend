@@ -143,4 +143,10 @@ public class ChannelService {
                 .build();
         return createChannel(welcomeChannel);
     }
+
+
+    @Transactional
+    public List<Channel> getChannelsByServerId(Long serverId) {
+        return channelRepository.findByServerId(serverId);
+    }
 }

@@ -72,7 +72,7 @@ public class AuthenticationService {
 
     public AuthResponseDTO authenticate(loginRequestDTO request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Email incorrecto o no registrado"));
 
         // Verificar contraseña
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {

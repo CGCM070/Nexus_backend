@@ -84,4 +84,12 @@ public class ChannelController {
         return channelService.getAllChannels();
     }
 
+
+
+
+    @GetMapping("/server/{serverId}")
+    public List<Channel> getChannelsByServer(@PathVariable Long serverId) {
+        return channelService.getChannelsByServerId(serverId);
+    }
+
 }

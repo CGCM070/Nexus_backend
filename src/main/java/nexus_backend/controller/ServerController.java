@@ -2,14 +2,15 @@ package nexus_backend.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import nexus_backend.domain.Server;
+import nexus_backend.domain.User;
+import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.ServerRepository;
+import nexus_backend.repository.UserRepository;
 import nexus_backend.service.ServerService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -19,10 +20,14 @@ public class ServerController {
 
     private final ServerService serverService;
     private final ServerRepository serverRepository;
+    private final UserRepository userRepository;
 
-    public ServerController(ServerService serverService, ServerRepository serverRepository) {
+    public ServerController(ServerService serverService,
+                            ServerRepository serverRepository
+    , UserRepository userRepository) {
         this.serverService = serverService;
         this.serverRepository = serverRepository;
+        this.userRepository = userRepository;
     }
 /*
     @GetMapping("")
@@ -51,7 +56,7 @@ public class ServerController {
 
     @PostMapping("/{serverId}/user/{userId}")
     public Server assignServerToUser(@PathVariable Long serverId, @PathVariable Long userId) {
-        return  serverService.assignServerToUser(serverId, userId);
+        return serverService.assignServerToUser(serverId, userId);
     }
 
 
@@ -75,5 +80,18 @@ public class ServerController {
         return serverRepository.findById(serverId)
                 .map(server -> server.getUser().getUsername().equals(username))
                 .orElse(false);
+    }
+
+    //Refactorizar luego
+    @GetMapping("/user")
+    public Server getUserServer() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        // Obtener usuario por correo electrónico en lugar de por nombre de usuario
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException(0L, "Usuario no encontrado"));
+
+        return serverService.getServerByUserId(user.getId());
     }
 }
