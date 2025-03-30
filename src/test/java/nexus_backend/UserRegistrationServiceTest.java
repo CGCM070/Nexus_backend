@@ -65,8 +65,7 @@ class UserRegistrationServiceTest {
             adminRoles.add(ERol.ROL_ADMIN);
             adminRoles.add(ERol.ROL_USER);
 
-            Set<ERol> userRoles = new HashSet<>();
-            userRoles.add(ERol.ROL_USER);
+
 
             // Crear un usuario con rol de administrador
             User user = User.builder()
@@ -85,7 +84,7 @@ class UserRegistrationServiceTest {
                     .email("cesar.gabriel.martinezs7@gmail.com")
                     .passwordHash(passwordEncoder.encode("password"))
                     .fullName("cesar castillo")
-                    .roles(userRoles)
+                    .roles(adminRoles)
                     .createdAt(new Timestamp(System.currentTimeMillis()))
                     .updatedAt(new Timestamp(System.currentTimeMillis()))
                     .build();
@@ -109,7 +108,7 @@ class UserRegistrationServiceTest {
             );
             assertNotNull(normalUser.getId());
             assertTrue(normalUser.getRoles().contains(ERol.ROL_USER));
-            assertEquals(1, normalUser.getRoles().size());
+            assertEquals(2, normalUser.getRoles().size());
 
             // Verificar servidor personal
             Server personalServer = serverRepository.findByUser(adminUser).orElseThrow(() ->

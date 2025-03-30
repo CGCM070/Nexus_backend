@@ -2,10 +2,15 @@ package nexus_backend.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import nexus_backend.domain.Note;
+import nexus_backend.domain.User;
+import nexus_backend.dto.NoteDTO;
+import nexus_backend.repository.UserRepository;
 import nexus_backend.service.NoteService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +22,11 @@ import java.util.List;
 public class NoteController {
 
     private final NoteService noteService;
+    private final UserRepository userRepository;
 
-    public NoteController(NoteService noteService) {
+    public NoteController(NoteService noteService, UserRepository userRepository) {
         this.noteService = noteService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("")
@@ -52,10 +59,11 @@ public class NoteController {
     // Listar notas por canal: cualquier miembro
     @PreAuthorize("@securityService.canAccessChannel(#channelId)")
     @GetMapping("/channel/{channelId}")
-    public List<Note> getNotesByChannel(@PathVariable Long channelId) {
-        return noteService.getNotesByChannel(channelId);
+    public List<NoteDTO> getNotesByChannel(@PathVariable Long channelId) {
+        return noteService.getNotesByChannel(channelId).stream()
+                .map(noteService::convertToDTO)
+                .toList();
     }
-
 
     @PreAuthorize("@securityService.canModifyResource(#id, 'note')")
     @DeleteMapping("/{id}")
@@ -76,6 +84,20 @@ public class NoteController {
         return noteService.updateNoteById(noteId, note);
     }
 
+
+    //------------------------------------------------
+
+    @GetMapping("/user")
+    public List<NoteDTO> getCurrentUserNotes() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        return noteService.getNotesByUserId(user.getId()).stream()
+                .map(noteService::convertToDTO)
+                .toList();
+    }
 
 
 }

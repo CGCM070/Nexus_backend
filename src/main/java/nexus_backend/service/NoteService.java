@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import nexus_backend.domain.Channel;
 import nexus_backend.domain.Note;
 import nexus_backend.domain.User;
+import nexus_backend.dto.NoteDTO;
 import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.NoteRepository;
@@ -49,6 +50,13 @@ public class NoteService {
     //no tiene sentido sin un canal asociado
     @Transactional
     public Note createNote(Note note) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        if (note.getCreatedAt() == null) {
+            note.setCreatedAt(now);
+        }
+        if (note.getUpdatedAt() == null) {
+            note.setUpdatedAt(now);
+        }
         return noteRepository.save(note);
     }
 
@@ -58,6 +66,12 @@ public class NoteService {
                 .orElseThrow(() -> new EntityNotFoundException(userId, "User"));
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new EntityNotFoundException(channelId, "Channel"));
+
+        // Establecer los timestamps
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        note.setCreatedAt(now);
+        note.setUpdatedAt(now); // También establecemos updatedAt inicialmente
+
         note.setUser(user);
         note.setChannel(channel);
         return noteRepository.save(note);
@@ -98,5 +112,19 @@ public class NoteService {
                 .build();
 
         return createNoteForUser(user.getId(), channel.getId(), welcomeNote);
+    }
+
+
+    public NoteDTO convertToDTO(Note note) {
+        return new NoteDTO(
+                note.getId(),
+                note.getTitle(),
+                note.getContent(),
+                note.getChannel().getId(),
+                note.getUser().getId(),
+                note.getUser().getUsername(),
+                note.getCreatedAt() != null ? note.getCreatedAt().toLocalDateTime() : null,
+                note.getUpdatedAt() != null ? note.getUpdatedAt().toLocalDateTime() : null
+        );
     }
 }
