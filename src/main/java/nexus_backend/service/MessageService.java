@@ -1,7 +1,6 @@
 package nexus_backend.service;
 
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import nexus_backend.domain.Channel;
 import nexus_backend.domain.Message;
@@ -90,6 +89,7 @@ public class MessageService {
     /**
      * Envía un mensaje a un canal específico
      */
+    @Transactional
     public void sendMessageToChannel(Message message) {
         // Convertir entidad a DTO internamente
         MessageDTO messageDTO = convertToDTO(message);

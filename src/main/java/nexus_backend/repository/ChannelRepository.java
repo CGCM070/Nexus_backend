@@ -15,7 +15,7 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
     // Retorna todos los canales donde el usuario es miembro
     List<Channel> findAllByInvitedUsersContaining(User user);
 
-
+    
 
     List<Channel> findByServerId(Long serverId);
 }
