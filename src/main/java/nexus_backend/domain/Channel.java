@@ -61,6 +61,7 @@ public class Channel {
     )
     @JsonIgnore
     @ToString.Exclude
+    @Builder.Default
     private Set<User> invitedUsers = new HashSet<>();
 
 

@@ -39,14 +39,7 @@ public class ChannelController {
         log.info("Creating new channel");
         return channelService.createChannel(channel);
     }
-/*
-    // Invitar usuario: solo admin/owner del canal
-    @PreAuthorize("@securityService.canManageChannel(#channelId)")
-    @PostMapping("/{channelId}/user/{userId}")
-    public void inviteUserToChannel(@PathVariable Long channelId, @PathVariable Long userId) {
-        channelService.inviteUserToChannel(channelId, userId, EChannelRole.MEMBER);
-    }
-*/
+
     // Eliminar usuario: solo admin/owner del canal
     @PreAuthorize("@securityService.canManageChannel(#channelId)")
     @DeleteMapping("/{channelId}/remove/{userId}")
