@@ -1,6 +1,7 @@
 package nexus_backend.controller;
 
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nexus_backend.domain.Channel;
@@ -30,6 +31,7 @@ public class WebSocketController {
     private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/channel/{channelId}/send")
+    @Transactional
     public void sendChannelMessage(@DestinationVariable Long channelId, MessageDTO messageDTO) {
 
 
