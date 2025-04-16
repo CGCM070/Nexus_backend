@@ -34,6 +34,12 @@ public class EmailInvitationService {
         User inviter = userRepository.findById(inviterId)
                 .orElseThrow(() -> new EntityNotFoundException(inviterId, "User"));
 
+        // Verificar que no se esté enviando invitación a sí mismo
+        if (inviter.getEmail().equalsIgnoreCase(toEmail)) {
+            throw new RuntimeException("No puedes enviarte una invitación a ti mismo");
+        }
+
+
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new EntityNotFoundException(channelId, "Channel"));
 
