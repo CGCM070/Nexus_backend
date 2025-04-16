@@ -54,7 +54,7 @@ public class ChannelService {
     }
 
 
-    // Añadir método para invitar con rol específico
+    // Añadir metodo para invitar con rol específico
     @Transactional
     public void inviteUserToChannel(Long channelId, Long userId, EChannelRole role) {
         Channel channel = channelRepository.findById(channelId)
@@ -77,6 +77,7 @@ public class ChannelService {
         channelUserRoleRepository.save(channelUserRole);
     }
 
+    //prodriamos prescindir de esta solo se usa en el test
     @Transactional
     public void inviteUserToChannel(Long channelId, Long userId) {
         Channel channel = channelRepository.findById(channelId)
