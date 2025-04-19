@@ -5,6 +5,7 @@ import nexus_backend.domain.Channel;
 import nexus_backend.domain.ChannelUserRole;
 import nexus_backend.domain.Server;
 import nexus_backend.domain.User;
+import nexus_backend.dto.ChannelCreateDTO;
 import nexus_backend.dto.UserDTO;
 import nexus_backend.enums.EChannelRole;
 import nexus_backend.exception.EntityNotFoundException;
@@ -143,6 +144,19 @@ public class ChannelService {
                 .createdAt(new Timestamp(System.currentTimeMillis()))
                 .build();
         return createChannel(welcomeChannel);
+    }
+
+    @Transactional
+    public Channel createChannelFromDTO(ChannelCreateDTO channelDTO) {
+        Channel channel = Channel.builder()
+                .name(channelDTO.getName())
+                .description(channelDTO.getDescription())
+                .server(Server.builder().id(channelDTO.getServerId()).build())
+                .createdAt(new Timestamp(System.currentTimeMillis()))
+                .updatedAt(new Timestamp(System.currentTimeMillis()))
+                .build();
+
+        return createChannel(channel);
     }
 
 

@@ -2,12 +2,15 @@ package nexus_backend.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import nexus_backend.domain.Channel;
+import nexus_backend.domain.Server;
+import nexus_backend.dto.ChannelCreateDTO;
 import nexus_backend.dto.UserDTO;
 import nexus_backend.enums.EChannelRole;
 import nexus_backend.service.ChannelService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
@@ -33,11 +36,19 @@ public class ChannelController {
     }
 
     // Crear canal: solo owner del servidor
-    @PreAuthorize("@securityService.canManageChannel(#channel.server.id)")
+//    @PreAuthorize("@securityService.canManageChannel(#channel.server.id)")
+//    @PostMapping("")
+//    public Channel createChannel(@RequestBody Channel channel) {
+//        log.info("Creating new channel");
+//        return channelService.createChannel(channel);
+//    }
+
+
+    @PreAuthorize("@securityService.canManageChannel(#channelDTO.serverId)")
     @PostMapping("")
-    public Channel createChannel(@RequestBody Channel channel) {
-        log.info("Creating new channel");
-        return channelService.createChannel(channel);
+    public Channel createChannel(@RequestBody ChannelCreateDTO channelDTO) {
+        log.info("Creating new channel for server {}", channelDTO.getServerId());
+        return channelService.createChannelFromDTO(channelDTO);
     }
 
     // Eliminar usuario: solo admin/owner del canal
@@ -76,9 +87,6 @@ public class ChannelController {
         log.info("Fetching all channels");
         return channelService.getAllChannels();
     }
-
-
-
 
     @GetMapping("/server/{serverId}")
     public List<Channel> getChannelsByServer(@PathVariable Long serverId) {
