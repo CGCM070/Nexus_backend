@@ -51,9 +51,21 @@ public class SecurityService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
-        // Actualizar a email en lugar de username
-        return channelUserRoleRepository.findByChannelIdAndUserEmail(channelId, email)
-                .map(role -> role.getRole() == EChannelRole.OWNER || role.getRole() == EChannelRole.ADMIN || role.getRole() == EChannelRole.MEMBER)
+        // Verificar rol en el canal
+        boolean hasRole = channelUserRoleRepository.findByChannelIdAndUserEmail(channelId, email)
+                .map(role -> role.getRole() == EChannelRole.OWNER ||
+                             role.getRole() == EChannelRole.ADMIN ||
+                             role.getRole() == EChannelRole.MEMBER)
+                .orElse(false);
+
+        if (hasRole) return true;
+
+        // Verificar si es propietario del servidor
+        return channelRepository.findById(channelId)
+                .map(channel -> {
+                    User serverOwner = channel.getServer().getUser();
+                    return serverOwner != null && serverOwner.getEmail().equals(email);
+                })
                 .orElse(false);
     }
 
