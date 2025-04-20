@@ -102,6 +102,43 @@ public void acceptInvitation(String token, Long userId) {
 
 - **RabbitMQ** como broker de mensajes para distribución entre instancias.
 
+### Sistema de Caché y Gestión de Mensajes
+
+**Arquitectura de Caché Cliente**
+La implementación utiliza un sistema de caché en dos niveles:
+
+**CacheService**: Gestión en memoria
+```typescript
+interface CacheItem {
+    data: any,
+    timestamp: number,
+    expiresIn: number
+}
+```
+### Almacenamiento temporal de mensajes ###
+- TTL configurable (default: 1 hora)
+- Invalidación automática
+- MessageService: Gestión de mensajes
+- Caché por canal (5 minutos)
+- Invalidación en nuevos mensajes
+- Integración con WebSocket
+
+### Flujo de Mensajes:
+
+- Cliente solicita mensajes → Verifica caché
+- Cache hit → Retorna datos inmediatamente
+- Cache miss → Solicita al servidor
+- Nuevos mensajes → Invalida caché
+
+### Sistema de Observables y Estado
+
+- MessageService implementa :
+- BehaviorSubject para estado de mensajes
+- Gestión automática de suscripciones
+- Reconexión WebSocket automática
+- Ordenamiento de mensajes por timestamp
+
+
 ### Persistencia en base de datos.
 
 ````java
