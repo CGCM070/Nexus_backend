@@ -17,11 +17,13 @@ public class EmailService {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
-        message.setSubject("Invitacion a canal de Nexus");
-        message.setText("Hola,\n\n" +
+        message.setSubject("Invitación a canal de Nexus");
+        message.setText("\n\n" +
                         inviterUsername + " te ha invitado a unirte al canal \"" + channelName + "\" en Nexus.\n\n" +
                         "Para aceptar la invitación, haz clic en el siguiente enlace:\n" +
                         "http://localhost:4200/invitation/accept?token=" + invitationToken + "\n\n" +
+                        "Si desea copiarlo : " + invitationToken + "\n\n" +
+                        "Si no quieres unirte al canal, simplemente ignora este correo.\n\n" +
                         "¡Gracias por usar Nexus!");
 
         mailSender.send(message);

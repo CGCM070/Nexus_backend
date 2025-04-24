@@ -108,8 +108,6 @@ public class EmailInvitationService {
         }
 
         // Añadir usuario al canal
-
-        // Esto debería llamar a la versión del metodo que asigna un rol
         channelService.inviteUserToChannel(
                 invitation.getChannel().getId(),
                 userId,

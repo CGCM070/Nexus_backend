@@ -73,15 +73,6 @@ public class ServerController {
     }
 
 
-    public boolean isServerOwner(Long serverId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-
-        return serverRepository.findById(serverId)
-                .map(server -> server.getUser().getUsername().equals(username))
-                .orElse(false);
-    }
-
     //Refactorizar luego
     @GetMapping("/user")
     public Server getUserServer() {
