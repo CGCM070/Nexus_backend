@@ -1,6 +1,7 @@
 package nexus_backend.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import nexus_backend.domain.Channel;
 import nexus_backend.domain.Server;
 import nexus_backend.domain.User;
 import nexus_backend.exception.EntityNotFoundException;
@@ -11,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,12 +32,6 @@ public class ServerController {
         this.serverRepository = serverRepository;
         this.userRepository = userRepository;
     }
-/*
-    @GetMapping("")
-    public List<Server> getAllServers() {
-        log.info("Fetching all servers");
-        return serverService.getAllServers();
-    }*/
 
     @GetMapping("/{id}")
     public Server getServerById(@PathVariable Long id) {
@@ -84,5 +81,16 @@ public class ServerController {
                 .orElseThrow(() -> new EntityNotFoundException(0L, "Usuario no encontrado"));
 
         return serverService.getServerByUserId(user.getId());
+    }
+
+    @GetMapping("/channels/invited")
+    public List<Channel> getInvitedChannels() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException(0L, "Usuario no encontrado"));
+
+        return serverService.getInvitedChannels(user.getId());
     }
 }

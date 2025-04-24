@@ -1,9 +1,11 @@
 package nexus_backend.service;
 
 import jakarta.transaction.Transactional;
+import nexus_backend.domain.Channel;
 import nexus_backend.domain.Server;
 import nexus_backend.domain.User;
 import nexus_backend.exception.EntityNotFoundException;
+import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.ServerRepository;
 import nexus_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,13 @@ public class ServerService {
 
     private final ServerRepository serverRepository;
     private final UserRepository userRepository;
+    private final ChannelRepository channelRepository;
 
-    public ServerService(ServerRepository serverRepository, UserRepository userRepository) {
+    public ServerService(ServerRepository serverRepository, UserRepository userRepository
+    , ChannelRepository channelRepository) {
         this.serverRepository = serverRepository;
         this.userRepository = userRepository;
+        this.channelRepository = channelRepository;
     }
 
     @Transactional
@@ -82,4 +87,11 @@ public class ServerService {
         return savedServer;
     }
 
+    @Transactional
+    public List<Channel> getInvitedChannels(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId, "User"));
+
+        return channelRepository.findAllByInvitedUsersContaining(user);
+    }
 }
