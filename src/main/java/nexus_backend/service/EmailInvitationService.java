@@ -43,9 +43,12 @@ public class EmailInvitationService {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new EntityNotFoundException(channelId, "Channel"));
 
+        // Verificar que no se esté invitando al dueño del canal
+        if (channel.getServer().getUser().getEmail().equalsIgnoreCase(toEmail)) {
+            throw new RuntimeException("No puedes invitar al dueño del canal");
+        }
 
-
-        //Veifivaciones
+        // Verificaciones de permisos
         if (channel.getServer().getUser().getId().equals(inviterId) &&
             channel.getInvitedUsers().contains(inviter)){
             throw new EntityNotFoundException(inviterId, "El usuario no tiene permisos para invitar a este canal");
