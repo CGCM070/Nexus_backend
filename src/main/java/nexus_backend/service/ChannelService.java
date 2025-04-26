@@ -9,9 +9,7 @@ import nexus_backend.dto.ChannelCreateDTO;
 import nexus_backend.dto.UserDTO;
 import nexus_backend.enums.EChannelRole;
 import nexus_backend.exception.EntityNotFoundException;
-import nexus_backend.repository.ChannelRepository;
-import nexus_backend.repository.ChannelUserRoleRepository;
-import nexus_backend.repository.UserRepository;
+import nexus_backend.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -26,15 +24,25 @@ public class ChannelService {
     private final UserRepository userRepository;
     private final MessageService messageService;
     private ChannelUserRoleRepository channelUserRoleRepository;
+    private final MessageRepository messageRepository;
+    private final NoteRepository noteRepository;
+    private final EmailInvitationRepository emailInvitationRepository;
 
 
     public ChannelService(ChannelRepository channelRepository, UserRepository userRepository,
                           MessageService messageService,
-                          ChannelUserRoleRepository channelUserRoleRepository) {
+                          ChannelUserRoleRepository channelUserRoleRepository,
+                          MessageRepository messageRepository, NoteRepository noteRepository,
+                          EmailInvitationRepository emailInvitationRepository) {
+
         this.channelRepository = channelRepository;
         this.userRepository = userRepository;
         this.messageService = messageService;
         this.channelUserRoleRepository = channelUserRoleRepository;
+        this.messageRepository = messageRepository;
+        this.noteRepository = noteRepository;
+        this.emailInvitationRepository = emailInvitationRepository;
+
     }
 
     public List<Channel> getAllChannels() {
@@ -43,7 +51,7 @@ public class ChannelService {
 
     public Channel getChannelById(Long id) {
         return channelRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(id , "Channel"));
+                .orElseThrow(() -> new EntityNotFoundException(id, "Channel"));
     }
 
     @Transactional
@@ -95,7 +103,7 @@ public class ChannelService {
         User user = userRepository.findById(userId).
                 orElseThrow(() -> new EntityNotFoundException(userId, "User not found"));
         channel.getInvitedUsers().remove(user);
-     //   channelRepository.save(channel); channel es dueño de la relación por lo que no es necesario guardar
+        //   channelRepository.save(channel); channel es dueño de la relación por lo que no es necesario guardar
     }
 
     @Transactional
@@ -113,15 +121,31 @@ public class ChannelService {
         return channelRepository.save(existingChannel);
 
     }
+
+
     @Transactional
     public void deleteChannel(Long channelId) {
-        Channel channel = channelRepository.findById(channelId).
-                orElseThrow(() -> new EntityNotFoundException(channelId, "Channel not found"));
-        // Eliminar la cola del canal
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new EntityNotFoundException(channelId, "Channel not found"));
+
+        // 1. Eliminar mensajes
+        messageRepository.deleteByChannelId(channelId);
+
+        // 2. Eliminar notas
+        noteRepository.deleteByChannelId(channelId);
+
+        // 3. Eliminar roles de usuarios
+        channelUserRoleRepository.deleteByChannelId(channelId);
+
+        // 4. Eliminar invitaciones pendientes por email
+        emailInvitationRepository.deleteByChannelId(channelId);
+
+        // 5. Eliminar la cola de mensajes
         messageService.deleteChannelQueue(channelId);
+
+        // 6. Eliminar el canal
         channelRepository.delete(channel);
     }
-
 
     //Devuelve los usuarios invitados a un canal en formato DTO
     //Se usa en el controlador para devolver los usuarios invitados a un canal
