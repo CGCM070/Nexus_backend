@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Invitación Nexus</title>
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+    <style type="text/css">
+        /* Resets y estilos base igual que antes */
+        body, html {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        * {
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: 'Helvetica', Arial, sans-serif !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            color: #2d3748 !important;
+            line-height: 1.5 !important;
+            background-color: #f7fafc !important;
+        }
+
+        /* Contenedor principal actualizado */
+        .email-container {
+            max-width: 600px !important;
+            margin: 0 auto !important;
+            padding: 20px !important;
+        }
+
+        /* Tarjeta del email actualizada */
+        .email-card {
+            background-color: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 32px 24px !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+            border: 1px solid #e2e8f0 !important;
+            margin: 0 auto !important;
+        }
+
+        /* Logo actualizado */
+        .logo {
+            font-size: 28px !important;
+            font-weight: bold !important;
+            color: #6D28D9 !important;
+            text-align: center !important;
+            margin-bottom: 24px !important;
+            letter-spacing: -0.5px !important;
+        }
+
+        /* Títulos y texto actualizados */
+        h1 {
+            color: #1a202c !important;
+            font-size: 22px !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            margin: 24px 0 16px !important;
+            line-height: 1.4 !important;
+        }
+
+        p {
+            font-size: 16px !important;
+            line-height: 1.6 !important;
+            margin: 12px 0 !important;
+            color: #4a5568 !important;
+        }
+
+        /* Botón actualizado */
+        .button {
+            display: inline-block !important;
+            background-color: #6D28D9 !important;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            padding: 12px 28px !important;
+            border-radius: 6px !important;
+            font-weight: 600 !important;
+            font-size: 16px !important;
+            margin: 24px 0 !important;
+            text-align: center !important;
+            transition: background-color 0.2s !important;
+        }
+
+        /* Contenedor del token actualizado */
+        .code-container {
+            background-color: #f8fafc !important;
+            padding: 16px !important;
+            text-align: center !important;
+            border-radius: 6px !important;
+            margin: 20px 0 !important;
+            font-family: 'Courier New', monospace !important;
+            font-size: 16px !important;
+            letter-spacing: 1px !important;
+            word-break: break-all !important;
+            border: 1px solid #e2e8f0 !important;
+            color: #4a5568 !important;
+        }
+
+        /* Separador actualizado */
+        .divider {
+            border-top: 1px solid #e2e8f0 !important;
+            margin: 28px 0 !important;
+            height: 0 !important;
+        }
+
+        /* Footer actualizado */
+        .footer {
+            font-size: 13px !important;
+            color: #718096 !important;
+            text-align: center !important;
+            margin-top: 28px !important;
+            padding: 16px 0 !important;
+        }
+
+        /* Contenedor de mensajes actualizado */
+        .message-container {
+            margin: 24px 0 !important;
+            text-align: left !important;
+        }
+
+        /* Texto en negrita actualizado */
+        .bold {
+            font-weight: 600 !important;
+            color: #2d3748 !important;
+        }
+
+        /* Soporte para Outlook */
+        @media screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                padding: 16px !important;
+            }
+            .email-card {
+                padding: 24px 16px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td align="center" style="padding: 20px 0;">
+            <table role="presentation" class="email-container" cellpadding="0" cellspacing="0" width="600">
+                <tr>
+                    <td class="email-card">
+                        <div class="logo">Nexus</div>
+
+                        <div class="message-container">
+                            <h1>Invitación para unirte a un canal</h1>
+
+
+
+                            <p><span class="bold" th:text="${inviterUsername}"></span> te ha invitado a unirte al canal "<span class="bold" th:text="${channelName}"></span>" en Nexus.</p>
+
+                            <div style="text-align: center;">
+                                <a th:href="@{${invitationUrl}}" class="button">Aceptar Invitación</a>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <p style="text-align: center; margin-top: 16px;">Si el botón no funciona, puedes usar este código de invitación:</p>
+
+                            <div class="code-container" th:text="${invitationToken}"></div>
+
+                            <p style="color: #718096 !important; font-size: 14px !important; text-align: center;">
+                                Si no esperabas esta invitación, puedes ignorar este correo.
+                            </p>
+                        </div>
+
+                        <div class="footer">
+                            <p>© 2024 Nexus. Todos los derechos reservados.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
