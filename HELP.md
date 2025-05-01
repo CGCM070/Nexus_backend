@@ -149,6 +149,67 @@ public void sendChannelMessage(@DestinationVariable Long channelId, MessageDTO m
     messageService.sendMessageToChannel(savedMessage);
 }
 ````
+### Actualizaciones del Sistema
+
+### Nuevas Implementaciones en MessageService
+
+**Handlers de Mensajes**
+El sistema ahora implementa una capa de handlers que complementa los métodos base:
+
+```markdown
+// Métodos base (API/WebSocket)
+sendChannelMessage(message: MessageDTO)
+editMessage(messageId: number, content: string)
+deleteMessage(messageId: number)
+
+// Nuevos handlers (Lógica de negocio)
+handleSendMessage(channelId: number, content: string, editingMessageId: number | null)
+handleEditMessage(message: MessageDTO)
+handleCancelEdit()
+handleDeleteMessage(message: MessageDTO)
+````
+
+### Estado de Edición Centralizado
+
+- Nuevo BehaviorSubject para gestionar estado de edición
+- Control unificado de mensajes en edición
+- Mejor separación de responsabilidades
+ 
+### Cambios en la Gestión de Mensajes
+
+**Eliminación de Mensajes**
+- Implementación de eliminación suave (soft delete)
+- Mantenimiento del contenido original en base de datos
+- Visualización de "Este mensaje fue eliminado"
+ 
+```java
+  @Transactional
+  public Message softDeleteMessage(Long messageId) {
+  Message message = messageRepository.findById(messageId)
+  .orElseThrow(() -> new EntityNotFoundException(messageId, "Message"));
+  message.setDeleted(true);
+  message.setEdited(false);
+  message.setLastEditedAt(null);
+  // ...
+  }
+```
+### Edición de Mensajes
+
+- Control de estados de edición
+- Validación de permisos mejorada
+- Registro de historial de ediciones
+### Seguridad y Permisos
+**Verificación de Permisos por Email**
+- Cambio de username a email para autenticación
+- Actualización de métodos de seguridad:
+
+### Los cambios principales incluyen:
+- Nueva capa de handlers
+- Gestión centralizada del estado
+- Cambios en el sistema de autenticación
+- Implementación de soft delete
+- Actualización de métodos de seguridad
+
 ### Aspectos Destacables
 - **Seguridad contextual**: Permisos específicos por canal y recurso.
 
