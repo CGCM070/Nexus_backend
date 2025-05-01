@@ -56,4 +56,20 @@ public class MessageController {
         // Convertir a DTO para la respuesta
         return messageService.convertToDTO(savedMessage);
     }
+
+    @PreAuthorize("@securityService.canModifyMessage(#messageId)")
+    @PutMapping("/{messageId}")
+    public MessageDTO editMessage(
+            @PathVariable Long messageId,
+            @RequestBody String newContent) {
+        Message editedMessage = messageService.editMessage(messageId, newContent);
+        return messageService.convertToDTO(editedMessage);
+    }
+
+    @PreAuthorize("@securityService.canModifyMessage(#messageId)")
+    @DeleteMapping("/{messageId}")
+    public MessageDTO deleteMessage(@PathVariable Long messageId) {
+        Message deletedMessage = messageService.softDeleteMessage(messageId);
+        return messageService.convertToDTO(deletedMessage);
+    }
 }

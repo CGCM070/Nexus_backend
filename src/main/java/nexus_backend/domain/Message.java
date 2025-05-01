@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -22,6 +23,10 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+
+    private boolean isEdited;
+    private boolean isDeleted;
+    private LocalDateTime lastEditedAt;
 
     @NotBlank
     private String content;

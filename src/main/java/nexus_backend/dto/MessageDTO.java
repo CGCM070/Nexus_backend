@@ -19,6 +19,9 @@ public class MessageDTO {
     private Long userId;
     private String username;
     private LocalDateTime timestamp;
+    private boolean isEdited;
+    private boolean isDeleted;
+    private LocalDateTime lastEditedAt;
 
 
 }

@@ -1,6 +1,8 @@
 package nexus_backend.service;
 
 
+import nexus_backend.domain.ChannelUserRole;
+import nexus_backend.domain.Message;
 import nexus_backend.domain.User;
 import nexus_backend.enums.EChannelRole;
 import nexus_backend.repository.*;
@@ -8,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class SecurityService {
@@ -85,6 +89,31 @@ public class SecurityService {
         }
 
         return false;
+    }
+
+    public boolean canModifyMessage(Long messageId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<Message> messageOpt = messageRepository.findById(messageId);
+
+        if (messageOpt.isEmpty() || auth == null) {
+            return false;
+        }
+
+        Message message = messageOpt.get();
+        String email = auth.getName(); // Usando email en lugar de username
+
+        // Verificar si es el autor del mensaje
+        if (message.getUser().getEmail().equals(email)) {
+            return true;
+        }
+
+        // Verificar roles de administrador en el canal
+        Optional<ChannelUserRole> roleOpt = channelUserRoleRepository
+                .findByChannelIdAndUserEmail(message.getChannel().getId(), email);
+
+        return roleOpt.isPresent() &&
+               (roleOpt.get().getRole() == EChannelRole.ADMIN ||
+                roleOpt.get().getRole() == EChannelRole.OWNER);
     }
 
     private User getUserFromAuth(Authentication auth) {

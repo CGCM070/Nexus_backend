@@ -6,6 +6,7 @@ import nexus_backend.domain.Channel;
 import nexus_backend.domain.Message;
 import nexus_backend.domain.User;
 import nexus_backend.dto.MessageDTO;
+import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.MessageRepository;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -103,17 +105,68 @@ public class MessageService {
     }
 
 
+    @Transactional
+    public Message editMessage(Long messageId, String newContent) {
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new EntityNotFoundException(messageId, "Message"));
+
+        message.setContent(newContent);
+        message.setEdited(true);
+        message.setLastEditedAt(LocalDateTime.now());
+
+        Message savedMessage = messageRepository.save(message);
+
+        // Enviar actualización por WebSocket y RabbitMQ
+        MessageDTO messageDTO = convertToDTO(savedMessage);
+        String routingKey = "nexus.channel." + savedMessage.getChannel().getId() + ".update";
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, messageDTO);
+        webSocketTemplate.convertAndSend("/topic/channel/" + savedMessage.getChannel().getId(), messageDTO);
+
+        return savedMessage;
+    }
+
+    @Transactional
+    public Message softDeleteMessage(Long messageId) {
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new EntityNotFoundException(messageId, "Message"));
+
+        if (message.isDeleted()) {
+            throw new IllegalStateException("El mensaje ya ha sido eliminado");
+        }
+
+        // Solo marcar como eliminado sin modificar el contenido
+        message.setDeleted(true);
+        message.setEdited(false);
+        message.setLastEditedAt(null);
+
+        Message savedMessage = messageRepository.save(message);
+
+        // Al enviar la actualización, ahí sí enviamos el texto de eliminado
+        MessageDTO messageDTO = convertToDTO(savedMessage);
+        messageDTO.setContent("Este mensaje fue eliminado");
+
+        // Enviar actualización con el texto modificado solo para la visualización
+        String routingKey = "nexus.channel." + savedMessage.getChannel().getId() + ".update";
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, messageDTO);
+        webSocketTemplate.convertAndSend("/topic/channel/" + savedMessage.getChannel().getId(), messageDTO);
+
+        return savedMessage;
+    }
+
     /**
      * Convierte una entidad Message a MessageDTO
      */
     public MessageDTO convertToDTO(Message message) {
         return new MessageDTO(
                 message.getId(),
-                message.getContent(),
+                message.isDeleted() ? "Este mensaje fue eliminado" : message.getContent(),
                 message.getChannel().getId(),
                 message.getUser().getId(),
                 message.getUser().getUsername(),
-                message.getCreatedAt().toLocalDateTime()
+                message.getCreatedAt().toLocalDateTime(),
+                message.isEdited(),
+                message.isDeleted(),
+                message.getLastEditedAt()
         );
     }
 }

@@ -22,4 +22,6 @@ public interface ChannelUserRoleRepository extends JpaRepository<ChannelUserRole
     @Modifying
     @Query("DELETE FROM ChannelUserRole cur WHERE cur.channel.id = :channelId")
     void deleteByChannelId(@Param("channelId") Long channelId);
+
+    Optional<ChannelUserRole> findByUserUsernameAndChannelId(String username, Long id);
 }
