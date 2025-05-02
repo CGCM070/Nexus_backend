@@ -1,6 +1,5 @@
 package nexus_backend.service;
 
-import lombok.RequiredArgsConstructor;
 import nexus_backend.domain.User;
 import nexus_backend.dto.AuthResponseDTO;
 import nexus_backend.dto.RegisterRequestDTO;
@@ -12,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
@@ -20,13 +18,24 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final UserRegistrationService userRegistrationService;
+
+    public AuthenticationService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService,
+            UserRegistrationService userRegistrationService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.userRegistrationService = userRegistrationService;
+    }
+
 
     @Transactional
     public AuthResponseDTO register(RegisterRequestDTO request) {
@@ -58,8 +67,7 @@ public class AuthenticationService {
                         .password(savedUser.getPasswordHash())
                         .authorities(savedUser.getRoles().stream()
                                 .map(role -> new SimpleGrantedAuthority(role.name()))
-                                .collect(Collectors.toList()))
-                        .build()
+                                .collect(Collectors.toList())).build()
         );
 
         return new AuthResponseDTO(

@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/v1/api/auth/**").permitAll()
-                        .requestMatchers("/ws/**").permitAll() //
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/v1/api/users/**").hasAuthority("ROL_ADMIN")
                         .requestMatchers("/v1/api/channels/**").authenticated()
                         .anyRequest().authenticated()
