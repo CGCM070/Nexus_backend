@@ -35,15 +35,6 @@ public class ChannelController {
         return channelService.getChannelById(id);
     }
 
-    // Crear canal: solo owner del servidor
-//    @PreAuthorize("@securityService.canManageChannel(#channel.server.id)")
-//    @PostMapping("")
-//    public Channel createChannel(@RequestBody Channel channel) {
-//        log.info("Creating new channel");
-//        return channelService.createChannel(channel);
-//    }
-
-
     @PreAuthorize("@securityService.canManageChannel(#channelDTO.serverId)")
     @PostMapping("")
     public Channel createChannel(@RequestBody ChannelCreateDTO channelDTO) {
