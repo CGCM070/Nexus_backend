@@ -24,18 +24,14 @@ public class Message {
     @EqualsAndHashCode.Include
     private Long id;
 
-    private boolean isEdited;
-    private boolean isDeleted;
-    private LocalDateTime lastEditedAt;
-
     @NotBlank
     private String content;
 
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime lastEditedAt;
 
-    private Timestamp updateAt;
-
-
+    private boolean isEdited;
+    private boolean isDeleted;
     @ManyToOne
     @JsonIgnore
     @ToString.Exclude

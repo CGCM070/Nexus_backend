@@ -80,7 +80,7 @@ public class MessageService {
 
         Message message = Message.builder()
                 .content(content)
-                .createdAt(new Timestamp(System.currentTimeMillis()))
+                .createdAt(LocalDateTime.now())
                 .user(user)
                 .channel(channel)
                 .build();
@@ -157,17 +157,16 @@ public class MessageService {
      * Convierte una entidad Message a MessageDTO
      */
     public MessageDTO convertToDTO(Message message) {
-        return new MessageDTO(
-                message.getId(),
-                message.isDeleted() ? "Este mensaje fue eliminado" : message.getContent(),
-                message.getChannel().getId(),
-                message.getUser().getId(),
-                message.getUser().getUsername(),
-                message.getCreatedAt().toLocalDateTime(),
-                message.isEdited(),
-                message.isDeleted(),
-                message.getLastEditedAt()
-        );
+        MessageDTO dto = new MessageDTO();
+        dto.setId(message.getId());
+        dto.setContent(message.isDeleted() ? "Este mensaje fue eliminado" : message.getContent());
+        dto.setChannelId(message.getChannel().getId());
+        dto.setUserId(message.getUser().getId());
+        dto.setUsername(message.getUser().getUsername());
+        dto.setLastEditedAt(message.getLastEditedAt());
+        dto.setEdited(message.isEdited());
+        dto.setDeleted(message.isDeleted());
+        return dto;
     }
 }
 
