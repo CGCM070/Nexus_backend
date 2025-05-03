@@ -19,6 +19,8 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    private static final String DEFAULT_AVATAR_URL = "/assets/default-avatar.png";
+
     private final UserRepository userRepository;
     private final ServerRepository serverRepository;
     private final ChannelRepository channelRepository;
@@ -90,5 +92,13 @@ public class UserService {
         // 5. Finalmente eliminar el usuario
         userRepository.delete(user);
 
+    }
+
+    public User updateAvatar(Long userId, String avatarUrl) {
+        User user = findById(userId);
+
+        user.setAvatarUrl(avatarUrl);
+        user.setAvatarUrl(avatarUrl.trim().isEmpty() ? DEFAULT_AVATAR_URL : avatarUrl);
+        return userRepository.save(user);
     }
 }
