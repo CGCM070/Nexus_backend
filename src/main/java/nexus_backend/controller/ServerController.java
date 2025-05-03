@@ -22,14 +22,12 @@ import java.util.List;
 public class ServerController {
 
     private final ServerService serverService;
-    private final ServerRepository serverRepository;
     private final UserRepository userRepository;
 
     public ServerController(ServerService serverService,
                             ServerRepository serverRepository
     , UserRepository userRepository) {
         this.serverService = serverService;
-        this.serverRepository = serverRepository;
         this.userRepository = userRepository;
     }
 

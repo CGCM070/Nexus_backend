@@ -23,7 +23,7 @@ public class ChannelService {
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
     private final MessageService messageService;
-    private ChannelUserRoleRepository channelUserRoleRepository;
+    private final ChannelUserRoleRepository channelUserRoleRepository;
     private final MessageRepository messageRepository;
     private final NoteRepository noteRepository;
     private final EmailInvitationRepository emailInvitationRepository;
