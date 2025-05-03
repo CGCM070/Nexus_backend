@@ -74,6 +74,7 @@ public class AuthenticationService {
                 savedUser.getId(),
                 savedUser.getUsername(),
                 savedUser.getEmail(),
+                savedUser.getAvatarUrl(),
                 jwtToken
         );
     }
@@ -102,6 +103,7 @@ public class AuthenticationService {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
+                user.getAvatarUrl(),
                 jwtToken
         );
     }

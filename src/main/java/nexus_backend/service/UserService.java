@@ -96,8 +96,6 @@ public class UserService {
 
     public User updateAvatar(Long userId, String avatarUrl) {
         User user = findById(userId);
-
-        user.setAvatarUrl(avatarUrl);
         user.setAvatarUrl(avatarUrl.trim().isEmpty() ? DEFAULT_AVATAR_URL : avatarUrl);
         return userRepository.save(user);
     }
