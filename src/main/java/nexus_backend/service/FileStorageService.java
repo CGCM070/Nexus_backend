@@ -31,6 +31,10 @@ public class FileStorageService {
     }
 
     public String storeFile(MultipartFile file) {
+        final long MAX_SIZE = 2 * 1024 * 1024; // 2 MB en bytes
+        if (file.getSize() > MAX_SIZE) {
+            throw new RuntimeException("El archivo no puede superar los 2 MB");
+        }
         String fileName = UUID.randomUUID().toString() + getFileExtension(file);
         try {
             Path targetLocation = Paths.get(uploadDir).resolve(fileName);
