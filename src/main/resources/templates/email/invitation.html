@@ -15,7 +15,7 @@
     </noscript>
     <![endif]-->
     <style type="text/css">
-        /* Resets y estilos base igual que antes */
+        /* Resets y estilos base */
         body, html {
             margin: 0 !important;
             padding: 0 !important;
@@ -32,41 +32,41 @@
             font-family: 'Helvetica', Arial, sans-serif !important;
             margin: 0 !important;
             padding: 0 !important;
-            color: #2d3748 !important;
+            color: #ffffff !important;
             line-height: 1.5 !important;
-            background-color: #f7fafc !important;
+            background-color: #121212 !important;
         }
 
-        /* Contenedor principal actualizado */
+        /* Contenedor principal  */
         .email-container {
             max-width: 600px !important;
             margin: 0 auto !important;
             padding: 20px !important;
         }
 
-        /* Tarjeta del email actualizada */
+        /* Tarjeta del email  */
         .email-card {
-            background-color: #ffffff !important;
+            background-color: #1e1e1e !important;
             border-radius: 8px !important;
             padding: 32px 24px !important;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+            border: 1px solid #333333 !important;
             margin: 0 auto !important;
         }
 
-        /* Logo actualizado */
+        /* Logo  */
         .logo {
-            font-size: 28px !important;
+            font-size: 32px !important;
             font-weight: bold !important;
-            color: #6D28D9 !important;
+            color: #9333ea !important;
             text-align: center !important;
             margin-bottom: 24px !important;
             letter-spacing: -0.5px !important;
         }
 
-        /* Títulos y texto actualizados */
+        /* Títulos y texto  */
         h1 {
-            color: #1a202c !important;
+            color: #ffffff !important;
             font-size: 22px !important;
             font-weight: bold !important;
             text-align: center !important;
@@ -78,10 +78,10 @@
             font-size: 16px !important;
             line-height: 1.6 !important;
             margin: 12px 0 !important;
-            color: #4a5568 !important;
+            color: #e0e0e0 !important;
         }
 
-        /* Botón actualizado */
+        /* Botón  */
         .button {
             display: inline-block !important;
             background-color: #6D28D9 !important;
@@ -96,9 +96,9 @@
             transition: background-color 0.2s !important;
         }
 
-        /* Contenedor del token actualizado */
+        /* Contenedor del token  */
         .code-container {
-            background-color: #f8fafc !important;
+            background-color: #2a2a2a !important;
             padding: 16px !important;
             text-align: center !important;
             border-radius: 6px !important;
@@ -107,36 +107,36 @@
             font-size: 16px !important;
             letter-spacing: 1px !important;
             word-break: break-all !important;
-            border: 1px solid #e2e8f0 !important;
-            color: #4a5568 !important;
+            border: 1px solid #333333 !important;
+            color: #e0e0e0 !important;
         }
 
-        /* Separador actualizado */
+        /* Separador  */
         .divider {
-            border-top: 1px solid #e2e8f0 !important;
+            border-top: 1px solid #333333 !important;
             margin: 28px 0 !important;
             height: 0 !important;
         }
 
-        /* Footer actualizado */
+        /* Footer  */
         .footer {
             font-size: 13px !important;
-            color: #718096 !important;
+            color: #888888 !important;
             text-align: center !important;
             margin-top: 28px !important;
             padding: 16px 0 !important;
         }
 
-        /* Contenedor de mensajes actualizado */
+        /* Contenedor de mensajes  */
         .message-container {
             margin: 24px 0 !important;
             text-align: left !important;
         }
 
-        /* Texto en negrita actualizado */
+        /* Texto en negrita  */
         .bold {
             font-weight: 600 !important;
-            color: #2d3748 !important;
+            color: #ffffff !important;
         }
 
         /* Soporte para Outlook */
@@ -163,7 +163,9 @@
                         <div class="message-container">
                             <h1>Invitación para unirte a un canal</h1>
 
-                            <p><span class="bold" th:text="${inviterUsername}"></span> te ha invitado a unirte al canal "<span class="bold" th:text="${channelName}"></span>" en Nexus.</p>
+                            <p style="text-align: center;"><span class="bold" th:text="${inviterUsername}">
+                            </span> te ha invitado a unirte al canal "<span class="bold" th:text="${channelName}"> </span>" en Nexus.
+                            </p>
 
                             <div style="text-align: center;">
                                 <a th:href="@{${invitationUrl}}" class="button">Aceptar Invitación</a>
@@ -175,7 +177,7 @@
 
                             <div class="code-container" th:text="${invitationToken}"></div>
 
-                            <p style="color: #718096 !important; font-size: 14px !important; text-align: center;">
+                            <p style="color: #888888 !important; font-size: 14px !important; text-align: center;">
                                 Si no esperabas esta invitación, puedes ignorar este correo.
                             </p>
                         </div>
