@@ -16,6 +16,7 @@ public class NoteDTO {
     private Long channelId;
     private Long userId;
     private String username;
+    private String avatarUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

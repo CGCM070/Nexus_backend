@@ -123,6 +123,7 @@ public class NoteService {
                 note.getChannel().getId(),
                 note.getUser().getId(),
                 note.getUser().getUsername(),
+                note.getUser().getAvatarUrl(),
                 note.getCreatedAt() != null ? note.getCreatedAt().toLocalDateTime() : null,
                 note.getUpdatedAt() != null ? note.getUpdatedAt().toLocalDateTime() : null
         );
