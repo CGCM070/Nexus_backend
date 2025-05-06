@@ -17,7 +17,7 @@ import java.util.UUID;
 public class FileStorageService {
     private final String uploadDir;
 
-    public FileStorageService(@Value("${app.upload.dir:uploads}") String uploadDir) {
+    public FileStorageService(@Value("${app.upload.dir}") String uploadDir) {
         this.uploadDir = uploadDir;
         createUploadDirectory();
     }

@@ -7,6 +7,7 @@ import nexus_backend.domain.Server;
 import nexus_backend.domain.User;
 import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.ChannelRepository;
+import nexus_backend.repository.ChannelUserRoleRepository;
 import nexus_backend.repository.ServerRepository;
 import nexus_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ServerRepository serverRepository;
     private final ChannelRepository channelRepository;
+    private final ChannelUserRoleRepository channelUserRoleRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -56,6 +58,8 @@ public class UserService {
                 channel.getInvitedUsers().remove(user));
         user.getInvitedChannels().clear();
 
+        // 2. Desconectar de los canales donde tiene un rol
+        channelUserRoleRepository.deleteByUserId(user.getId());
 
         // 3. Desconectar tareas asignadas
         user.getAssignedTasks().forEach(task ->
