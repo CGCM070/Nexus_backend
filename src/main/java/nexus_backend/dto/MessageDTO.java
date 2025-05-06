@@ -18,6 +18,7 @@ public class MessageDTO {
     private Long channelId;
     private Long userId;
     private String username;
+    private String avatarUrl;
     private LocalDateTime lastEditedAt;
     private boolean isEdited;
     private boolean isDeleted;

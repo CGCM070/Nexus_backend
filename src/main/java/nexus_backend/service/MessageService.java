@@ -163,6 +163,7 @@ public class MessageService {
         dto.setChannelId(message.getChannel().getId());
         dto.setUserId(message.getUser().getId());
         dto.setUsername(message.getUser().getUsername());
+        dto.setAvatarUrl(message.getUser().getAvatarUrl());
         dto.setLastEditedAt(message.getLastEditedAt());
         dto.setEdited(message.isEdited());
         dto.setDeleted(message.isDeleted());
