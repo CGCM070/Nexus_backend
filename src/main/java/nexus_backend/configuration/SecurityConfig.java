@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/v1/api/auth/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/v1/api/users/*/change-password").authenticated()
                         .requestMatchers("/v1/api/users/**").hasAuthority("ROL_ADMIN")
                         .requestMatchers("/v1/api/channels/**").authenticated()
                         .anyRequest().authenticated()

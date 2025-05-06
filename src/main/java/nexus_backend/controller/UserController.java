@@ -2,6 +2,7 @@ package nexus_backend.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import nexus_backend.domain.User;
+import nexus_backend.dto.ChangePasswordRequestDTO;
 import nexus_backend.dto.UserDTO;
 import nexus_backend.service.FileStorageService;
 import nexus_backend.service.UserService;
@@ -67,6 +68,11 @@ public class UserController {
         return ResponseEntity.ok(convertToDTO(updatedUser));
     }
 
+    @PostMapping("/{id}/change-password")
+    public ResponseEntity<?> changePassword(@PathVariable Long id, @RequestBody ChangePasswordRequestDTO request) {
+        userService.changePassword(id, request.getCurrentPassword(), request.getNewPassword());
+        return ResponseEntity.ok().build();
+    }
     private UserDTO convertToDTO(User user) {
         return new UserDTO(
                 user.getId(),

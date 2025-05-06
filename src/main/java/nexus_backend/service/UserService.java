@@ -10,6 +10,7 @@ import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.ChannelUserRoleRepository;
 import nexus_backend.repository.ServerRepository;
 import nexus_backend.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -102,5 +103,20 @@ public class UserService {
         User user = findById(userId);
         user.setAvatarUrl(avatarUrl.trim().isEmpty() ? DEFAULT_AVATAR_URL : avatarUrl);
         return userRepository.save(user);
+    }
+
+
+    public void changePassword(Long id, String currentPassword, String newPassword) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(id, "User"));
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if (!encoder.matches(currentPassword, user.getPasswordHash())) {
+            throw new IllegalArgumentException("La contraseña actual es incorrecta");
+        }
+
+        user.setPasswordHash(encoder.encode(newPassword));
+        userRepository.save(user);
     }
 }
