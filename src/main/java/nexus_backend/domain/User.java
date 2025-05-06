@@ -46,20 +46,17 @@ public class User {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    // Corrigiendo la relación bidireccional, usando cascade pero sin orphanRemoval
+
     @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Server personalServer;
 
-
-
-    // Relación faltante con los canales donde el usuario está invitado
     @ManyToMany(mappedBy = "invitedUsers")
     @Builder.Default
     @JsonIgnore
     @ToString.Exclude
     private Set<Channel> invitedChannels = new HashSet<>();
 
-    // Mantener orphanRemoval solo para las entidades que son "propiedad" exclusiva del usuario
+
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @JsonIgnore
@@ -72,7 +69,7 @@ public class User {
     @ToString.Exclude
     private Set<Task> createdTasks = new HashSet<>();
 
-    // Las tareas asignadas no deberían eliminarse al eliminar un usuario
+
     @OneToMany(mappedBy = "assignedTo", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Builder.Default
     @JsonIgnore
