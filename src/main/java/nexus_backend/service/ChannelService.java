@@ -10,6 +10,7 @@ import nexus_backend.dto.UserDTO;
 import nexus_backend.enums.EChannelRole;
 import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.*;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -27,13 +28,15 @@ public class ChannelService {
     private final MessageRepository messageRepository;
     private final NoteRepository noteRepository;
     private final EmailInvitationRepository emailInvitationRepository;
+    private SimpMessagingTemplate messagingTemplate;
 
 
     public ChannelService(ChannelRepository channelRepository, UserRepository userRepository,
                           MessageService messageService,
                           ChannelUserRoleRepository channelUserRoleRepository,
                           MessageRepository messageRepository, NoteRepository noteRepository,
-                          EmailInvitationRepository emailInvitationRepository) {
+                          EmailInvitationRepository emailInvitationRepository,
+                          SimpMessagingTemplate messagingTemplate) {
 
         this.channelRepository = channelRepository;
         this.userRepository = userRepository;
@@ -42,6 +45,7 @@ public class ChannelService {
         this.messageRepository = messageRepository;
         this.noteRepository = noteRepository;
         this.emailInvitationRepository = emailInvitationRepository;
+        this.messagingTemplate = messagingTemplate;
 
     }
 
@@ -145,6 +149,7 @@ public class ChannelService {
 
         // 6. Eliminar el canal
         channelRepository.delete(channel);
+        messagingTemplate.convertAndSend("/topic/channel-deleted/" + channelId, "deleted");
     }
 
     //Devuelve los usuarios invitados a un canal en formato DTO
