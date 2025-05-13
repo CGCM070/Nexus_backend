@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/v1/api/users/*/change-password").authenticated()
                         .requestMatchers("/v1/api/users/**").hasAuthority("ROL_ADMIN")
                         .requestMatchers("/v1/api/channels/**").authenticated()
+                        .requestMatchers("/v1/api/tasks/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
