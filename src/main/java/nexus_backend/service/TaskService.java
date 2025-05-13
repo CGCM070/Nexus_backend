@@ -67,6 +67,10 @@ public class TaskService {
 
     @Transactional
     public TaskDTO assignTask(Long taskId, Long userId) {
+        if (taskId == null || userId == null) {
+            throw new IllegalArgumentException("TaskId y UserId no pueden ser null");
+        }
+
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException(taskId, "Task"));
         User assignee = userRepository.findById(userId)
@@ -74,8 +78,9 @@ public class TaskService {
 
         task.setAssignedTo(assignee);
         task.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        Task savedTask = taskRepository.save(task);
 
-        return convertToDTO(taskRepository.save(task));
+        return convertToDTO(savedTask);
     }
 
     @Transactional
@@ -87,20 +92,22 @@ public class TaskService {
     }
 
     private TaskDTO convertToDTO(Task task) {
-        return new TaskDTO(
-            task.getId(),
-            task.getTitle(),
-            task.getDescription(),
-            task.getStatus(),
-            task.getChannel().getId(),
-            task.getCreator().getId(),
-            task.getCreator().getUsername(),
-            task.getCreator().getAvatarUrl(),
-            task.getAssignedTo() != null ? task.getAssignedTo().getId() : null,
-            task.getAssignedTo() != null ? task.getAssignedTo().getUsername() : null,
-            task.getAssignedTo() != null ? task.getAssignedTo().getAvatarUrl() : null,
-            task.getCreatedAt() != null ? task.getCreatedAt().toLocalDateTime() : null,
-            task.getUpdatedAt() != null ? task.getUpdatedAt().toLocalDateTime() : null
+        TaskDTO dto = new TaskDTO(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getStatus(),
+                task.getChannel().getId(),
+                task.getCreator().getId(),
+                task.getCreator().getUsername(),
+                task.getCreator().getAvatarUrl(),
+                task.getAssignedTo() != null ? task.getAssignedTo().getId() : null,
+                task.getAssignedTo() != null ? task.getAssignedTo().getUsername() : null,
+                task.getAssignedTo() != null ? task.getAssignedTo().getAvatarUrl() : null,
+                task.getCreatedAt().toLocalDateTime(),
+                task.getUpdatedAt().toLocalDateTime(),
+                true  // Por defecto true, se puede modificar según la lógica de permisos
         );
+        return dto;
     }
 }

@@ -23,4 +23,5 @@ public class TaskDTO {
     private String assignedToAvatarUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private boolean canEdit;
 }
