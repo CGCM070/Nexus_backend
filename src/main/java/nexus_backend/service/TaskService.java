@@ -12,7 +12,6 @@ import nexus_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,19 +66,40 @@ public class TaskService {
 
     @Transactional
     public TaskDTO assignTask(Long taskId, Long userId) {
-        if (taskId == null || userId == null) {
-            throw new IllegalArgumentException("TaskId y UserId no pueden ser null");
+        // Validación de parámetros
+        if (taskId == null) {
+            throw new IllegalArgumentException("El ID de la tarea no puede ser nulo");
+        }
+        if (userId == null) {
+            throw new IllegalArgumentException("El ID del usuario no puede ser nulo");
         }
 
+        // Obtener la tarea
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException(taskId, "Task"));
+
+        // Obtener el usuario asignado
         User assignee = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, "User"));
 
+        // Validar que el usuario pertenece al canal
+        Channel channel = task.getChannel();
+        if (channel == null) {
+            throw new IllegalStateException("La tarea no está asociada a ningún canal");
+        }
+
+        boolean isUserInChannel = channel.getInvitedUsers().stream()
+                .anyMatch(user -> user.getId().equals(userId));
+
+        if (!isUserInChannel) {
+            throw new IllegalStateException("El usuario no pertenece a este canal");
+        }
+
+        // Asignar y guardar
         task.setAssignedTo(assignee);
         task.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        Task savedTask = taskRepository.save(task);
 
+        Task savedTask = taskRepository.save(task);
         return convertToDTO(savedTask);
     }
 

@@ -3,6 +3,7 @@ package nexus_backend.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nexus_backend.enums.TaskStatus;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +14,7 @@ public class TaskDTO {
     private Long id;
     private String title;
     private String description;
-    private String status;
+    private TaskStatus status;
     private Long channelId;
     private Long creatorId;
     private String creatorUsername;

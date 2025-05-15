@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import nexus_backend.enums.TaskStatus;
 
 import java.sql.Timestamp;
 
@@ -25,14 +26,15 @@ public class Task {
     @Column(length = 45)
     private String title;
 
+    @NotBlank
     private String description;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TaskStatus status = TaskStatus.PENDING;
 
     private Timestamp createdAt;
-
     private Timestamp updatedAt;
-
 
     @ManyToOne
     @JsonIgnore

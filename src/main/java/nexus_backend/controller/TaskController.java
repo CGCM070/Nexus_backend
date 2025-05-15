@@ -49,10 +49,13 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("@securityService.canAccessChannel(#channelId)")
+    @PreAuthorize("@securityService.canModifyResource(#taskId, 'task')")
     @PutMapping("/{taskId}/assign/{userId}")
-    public TaskDTO assignTask(@PathVariable Long taskId, 
-                            @PathVariable Long userId) {
+    public TaskDTO assignTask(@PathVariable Long taskId, @PathVariable Long userId) {
+        if (taskId == null || userId == null) {
+            throw new IllegalArgumentException("Los IDs no pueden ser nulos");
+        }
         return taskService.assignTask(taskId, userId);
     }
+
 }
