@@ -30,9 +30,9 @@ public class TaskController {
 
     @PreAuthorize("@securityService.canAccessChannel(#channelId)")
     @PostMapping("/channel/{channelId}/user/{userId}")
-    public TaskDTO createTask(@PathVariable Long channelId, 
-                            @PathVariable Long userId,
-                            @RequestBody Task task) {
+    public TaskDTO createTask(@PathVariable Long channelId,
+                              @PathVariable Long userId,
+                              @RequestBody Task task) {
         return taskService.createTask(userId, channelId, task);
     }
 
@@ -49,13 +49,15 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
+    //    @PreAuthorize("@securityService.canModifyResource(#taskId, 'task')")
     @PreAuthorize("@securityService.canModifyResource(#taskId, 'task')")
     @PutMapping("/{taskId}/assign/{userId}")
     public TaskDTO assignTask(@PathVariable Long taskId, @PathVariable Long userId) {
-        if (taskId == null || userId == null) {
-            throw new IllegalArgumentException("Los IDs no pueden ser nulos");
+        try {
+            return taskService.assignTask(taskId, userId);
+        } catch (Exception e) {
+            log.error("Error al asignar la tarea: {}", e.getMessage());
+            throw e;
         }
-        return taskService.assignTask(taskId, userId);
     }
-
 }

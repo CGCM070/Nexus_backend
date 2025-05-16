@@ -1,6 +1,7 @@
 package nexus_backend.service;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import nexus_backend.domain.Channel;
 import nexus_backend.domain.Task;
 import nexus_backend.domain.User;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Service
 public class TaskService {
 
@@ -66,30 +67,28 @@ public class TaskService {
 
     @Transactional
     public TaskDTO assignTask(Long taskId, Long userId) {
-        // Validación de parámetros
-        if (taskId == null) {
-            throw new IllegalArgumentException("El ID de la tarea no puede ser nulo");
-        }
-        if (userId == null) {
-            throw new IllegalArgumentException("El ID del usuario no puede ser nulo");
+        // Validar IDs
+        if (taskId == null || userId == null) {
+            throw new IllegalArgumentException("Los IDs no pueden ser nulos");
         }
 
-        // Obtener la tarea
+        // Obtener tarea y usuario
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException(taskId, "Task"));
 
-        // Obtener el usuario asignado
         User assignee = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId, "User"));
 
-        // Validar que el usuario pertenece al canal
+        // Validar canal
         Channel channel = task.getChannel();
         if (channel == null) {
             throw new IllegalStateException("La tarea no está asociada a ningún canal");
         }
 
-        boolean isUserInChannel = channel.getInvitedUsers().stream()
-                .anyMatch(user -> user.getId().equals(userId));
+        // Verificar si el usuario está en el canal
+        boolean isUserInChannel = channel.getInvitedUsers() != null &&
+                                  channel.getInvitedUsers().stream()
+                                          .anyMatch(user -> user.getId().equals(userId));
 
         if (!isUserInChannel) {
             throw new IllegalStateException("El usuario no pertenece a este canal");
@@ -99,10 +98,14 @@ public class TaskService {
         task.setAssignedTo(assignee);
         task.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
-        Task savedTask = taskRepository.save(task);
-        return convertToDTO(savedTask);
+        try {
+            Task savedTask = taskRepository.save(task);
+            return convertToDTO(savedTask);
+        } catch (Exception e) {
+            log.error("Error al guardar la tarea asignada: {}", e.getMessage());
+            throw new RuntimeException("Error al asignar la tarea", e);
+        }
     }
-
     @Transactional
     public void deleteTask(Long taskId) {
         if (!taskRepository.existsById(taskId)) {
