@@ -84,25 +84,40 @@ public class SecurityService {
         switch (resourceType.toLowerCase()) {
             case "note":
                 return noteRepository.findById(resourceId)
-                        .map(note -> note.getUser().getId().equals(currentUser.getId()))
+                        .map(note -> {
+                            // El creador puede modificar
+                            if (note.getUser().getId().equals(currentUser.getId())) {
+                                return true;
+                            }
+                            // OWNER o ADMIN del canal pueden modificar
+                            return channelUserRoleRepository
+                                           .findByChannelIdAndUserEmail(note.getChannel().getId(), currentUser.getEmail())
+                                           .map(role -> role.getRole() == EChannelRole.OWNER || role.getRole() == EChannelRole.ADMIN)
+                                           .orElse(false)
+                                   // O es el dueño del servidor
+                                   || isChannelOwner(note.getChannel().getId(), currentUser.getEmail());
+                        })
                         .orElse(false);
             case "message":
+                // El creador del mensaje puede modificarlo
                 return messageRepository.findById(resourceId)
                         .map(message -> message.getUser().getId().equals(currentUser.getId()))
                         .orElse(false);
             case "task":
                 return taskRepository.findById(resourceId)
                         .map(task -> {
-                            // El creador de la tarea puede modificarla
                             if (task.getCreator().getId().equals(currentUser.getId())) {
                                 return true;
                             }
-                            // Verificar si el usuario tiene rol de ADMIN u OWNER en el canal
-                            return channelUserRoleRepository
+                            // ADMIN u OWNER en la tabla de roles
+                            boolean hasRole = channelUserRoleRepository
                                     .findByChannelIdAndUserEmail(task.getChannel().getId(), currentUser.getEmail())
                                     .map(role -> role.getRole() == EChannelRole.OWNER ||
                                                  role.getRole() == EChannelRole.ADMIN)
                                     .orElse(false);
+                            if (hasRole) return true;
+                            // O es el dueño del canal (dueño del servidor)
+                            return isChannelOwner(task.getChannel().getId(), currentUser.getEmail());
                         })
                         .orElse(false);
             default:
@@ -110,6 +125,15 @@ public class SecurityService {
         }
     }
 
+    // Nuevo método auxiliar
+    private boolean isChannelOwner(Long channelId, String email) {
+        return channelRepository.findById(channelId)
+                .map(channel -> {
+                    User serverOwner = channel.getServer().getUser();
+                    return serverOwner != null && serverOwner.getEmail().equals(email);
+                })
+                .orElse(false);
+    }
     public boolean canModifyMessage(Long messageId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<Message> messageOpt = messageRepository.findById(messageId);
