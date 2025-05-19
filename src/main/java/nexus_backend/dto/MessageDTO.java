@@ -1,11 +1,12 @@
 package nexus_backend.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+
 
 
 @Data
@@ -19,7 +20,8 @@ public class MessageDTO {
     private Long userId;
     private String username;
     private String avatarUrl;
-    private LocalDateTime lastEditedAt;
+    private Timestamp createdAt;
+    private Timestamp lastEditedAt;
     private boolean isEdited;
     private boolean isDeleted;
 

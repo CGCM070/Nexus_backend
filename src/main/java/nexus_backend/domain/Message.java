@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 
 @Data
@@ -26,8 +25,8 @@ public class Message {
     @NotBlank
     private String content;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime lastEditedAt;
+    private Timestamp createdAt;
+    private Timestamp lastEditedAt;
 
     private boolean isEdited;
     private boolean isDeleted;

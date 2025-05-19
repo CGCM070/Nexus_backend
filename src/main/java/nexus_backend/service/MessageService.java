@@ -80,7 +80,7 @@ public class MessageService {
 
         Message message = Message.builder()
                 .content(content)
-                .createdAt(LocalDateTime.now())
+                .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                 .user(user)
                 .channel(channel)
                 .build();
@@ -112,7 +112,7 @@ public class MessageService {
 
         message.setContent(newContent);
         message.setEdited(true);
-        message.setLastEditedAt(LocalDateTime.now());
+        message.setLastEditedAt(Timestamp.valueOf(LocalDateTime.now()));
 
         Message savedMessage = messageRepository.save(message);
 
@@ -164,10 +164,12 @@ public class MessageService {
         dto.setUserId(message.getUser().getId());
         dto.setUsername(message.getUser().getUsername());
         dto.setAvatarUrl(message.getUser().getAvatarUrl());
+        dto.setCreatedAt(message.getCreatedAt());
         dto.setLastEditedAt(message.getLastEditedAt());
         dto.setEdited(message.isEdited());
         dto.setDeleted(message.isDeleted());
         return dto;
     }
 }
+
 
