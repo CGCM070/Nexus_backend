@@ -60,7 +60,7 @@ public class MessageService {
      * Obtiene mensajes por canal
      */
     public List<Message> getMessagesByChannelId(Long channelId) {
-        return messageRepository.findByChannelIdOrderByCreatedAtDesc(channelId);
+        return messageRepository.findByChannelIdOrderByCreatedAtAsc(channelId);
     }
 
     /**
