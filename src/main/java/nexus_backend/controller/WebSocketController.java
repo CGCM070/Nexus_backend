@@ -28,7 +28,6 @@ public class WebSocketController {
     private final MessageService messageService;
     private final UserRepository userRepository;
     private final ChannelRepository channelRepository;
-    private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/channel/{channelId}/send")
     @Transactional
