@@ -26,6 +26,7 @@ public class Note {
     @NotBlank
     private String title;
 
+    @NotBlank
     private String content;
 
     private Timestamp createdAt;
