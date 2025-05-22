@@ -106,6 +106,17 @@ public class TaskService {
             throw new RuntimeException("Error al asignar la tarea", e);
         }
     }
+
+    @Transactional
+    public TaskDTO unassignTask(Long taskId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new EntityNotFoundException(taskId, "Task"));
+
+        task.setAssignedTo(null);
+        task.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+        return convertToDTO(taskRepository.save(task));
+    }
     @Transactional
     public void deleteTask(Long taskId) {
         if (!taskRepository.existsById(taskId)) {

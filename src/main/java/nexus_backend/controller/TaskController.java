@@ -60,4 +60,10 @@ public class TaskController {
             throw e;
         }
     }
+
+    @PreAuthorize("@securityService.canModifyResource(#taskId, 'task')")
+    @PutMapping("/{taskId}/unassign")
+    public TaskDTO unassignTask(@PathVariable Long taskId) {
+        return taskService.unassignTask(taskId);
+    }
 }
