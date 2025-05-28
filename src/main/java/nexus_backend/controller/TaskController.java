@@ -3,6 +3,7 @@ package nexus_backend.controller;
 import lombok.extern.slf4j.Slf4j;
 import nexus_backend.domain.Task;
 import nexus_backend.dto.TaskDTO;
+import nexus_backend.enums.TaskStatus;
 import nexus_backend.service.TaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,9 +25,13 @@ public class TaskController {
     }
 
     @PreAuthorize("@securityService.canAccessChannel(#channelId)")
-    @GetMapping("/channel/{channelId}")
-    public Page<TaskDTO> getTasksByChannelPaged(@PathVariable Long channelId, Pageable pageable) {
-        return taskService.getTasksByChannelPaged(channelId, pageable);
+    @GetMapping("/channel/{channelId}/search")
+    public Page<TaskDTO> searchTasksByChannel(
+            @PathVariable Long channelId,
+            @RequestParam(required = false) String searchText,
+            @RequestParam(required = false) TaskStatus status,
+            Pageable pageable) {
+        return taskService.searchTasksByChannel(channelId, searchText, status, pageable);
     }
 
     @PreAuthorize("@securityService.canAccessChannel(#channelId)")
@@ -50,7 +55,6 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-    //    @PreAuthorize("@securityService.canModifyResource(#taskId, 'task')")
     @PreAuthorize("@securityService.canModifyResource(#taskId, 'task')")
     @PutMapping("/{taskId}/assign/{userId}")
     public TaskDTO assignTask(@PathVariable Long taskId, @PathVariable Long userId) {

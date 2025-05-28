@@ -6,6 +6,7 @@ import nexus_backend.domain.Channel;
 import nexus_backend.domain.Task;
 import nexus_backend.domain.User;
 import nexus_backend.dto.TaskDTO;
+import nexus_backend.enums.TaskStatus;
 import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.TaskRepository;
@@ -32,8 +33,8 @@ public class TaskService {
         this.channelRepository = channelRepository;
     }
 
-    public Page<TaskDTO> getTasksByChannelPaged(Long channelId, Pageable pageable) {
-        return taskRepository.findAllByChannel_Id(channelId, pageable)
+    public Page<TaskDTO> searchTasksByChannel(Long channelId, String searchText, TaskStatus status, Pageable pageable) {
+        return taskRepository.searchTasks(channelId, searchText, status, pageable)
                 .map(this::convertToDTO);
     }
 
