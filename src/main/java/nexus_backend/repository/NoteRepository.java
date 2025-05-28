@@ -15,8 +15,6 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
     List<Note>getAllByChannel_Id(Long id);
 
-    Note deleteNoteByChannel_IdAndUser_Id(Long channelId, Long userId);
-
     @Modifying
     @Query("DELETE FROM Note n WHERE n.channel.id = :channelId")
     void deleteByChannelId(@Param("channelId") Long channelId);

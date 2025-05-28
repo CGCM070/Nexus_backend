@@ -10,11 +10,12 @@ import nexus_backend.exception.EntityNotFoundException;
 import nexus_backend.repository.ChannelRepository;
 import nexus_backend.repository.TaskRepository;
 import nexus_backend.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class TaskService {
@@ -31,10 +32,9 @@ public class TaskService {
         this.channelRepository = channelRepository;
     }
 
-    public List<TaskDTO> getTasksByChannel(Long channelId) {
-        return taskRepository.findAllByChannelId(channelId).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public Page<TaskDTO> getTasksByChannelPaged(Long channelId, Pageable pageable) {
+        return taskRepository.findAllByChannel_Id(channelId, pageable)
+                .map(this::convertToDTO);
     }
 
     @Transactional

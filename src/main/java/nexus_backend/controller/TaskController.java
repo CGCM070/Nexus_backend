@@ -4,11 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import nexus_backend.domain.Task;
 import nexus_backend.dto.TaskDTO;
 import nexus_backend.service.TaskService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -24,8 +25,8 @@ public class TaskController {
 
     @PreAuthorize("@securityService.canAccessChannel(#channelId)")
     @GetMapping("/channel/{channelId}")
-    public List<TaskDTO> getTasksByChannel(@PathVariable Long channelId) {
-        return taskService.getTasksByChannel(channelId);
+    public Page<TaskDTO> getTasksByChannelPaged(@PathVariable Long channelId, Pageable pageable) {
+        return taskService.getTasksByChannelPaged(channelId, pageable);
     }
 
     @PreAuthorize("@securityService.canAccessChannel(#channelId)")
