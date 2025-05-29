@@ -59,10 +59,9 @@ public class NoteController {
     // Listar notas por canal: cualquier miembro
     @PreAuthorize("@securityService.canAccessChannel(#channelId)")
     @GetMapping("/channel/{channelId}")
-    public List<NoteDTO> getNotesByChannel(@PathVariable Long channelId) {
-        return noteService.getNotesByChannel(channelId).stream()
-                .map(noteService::convertToDTO)
-                .toList();
+    public Page<NoteDTO> getNotesByChannel(@PathVariable Long channelId, Pageable pageable) {
+        Page<Note> notePage = noteService.getNotesByChannel(channelId, pageable);
+        return notePage.map(noteService::convertToDTO);
     }
 
     @PreAuthorize("@securityService.canModifyResource(#id, 'note')")

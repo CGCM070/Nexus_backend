@@ -94,13 +94,9 @@ public class NoteService {
         noteRepository.deleteById(noteId);
     }
 
-    public List<Note> getNotesByChannel(Long channelId) {
-        return noteRepository.getAllByChannel_Id(channelId);
+    public Page<Note> getNotesByChannel(Long channelId, Pageable pageable) {
+        return noteRepository.getAllByChannel_Id(channelId, pageable);
     }
-
-
-
-
 
     @Transactional
     public Note createWelcomeNoteForUser(User user, Channel channel) {
