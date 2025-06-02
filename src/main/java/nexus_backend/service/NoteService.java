@@ -69,7 +69,7 @@ public class NoteService {
         // Establecer los timestamps
         Timestamp now = new Timestamp(System.currentTimeMillis());
         note.setCreatedAt(now);
-        note.setUpdatedAt(now); // También establecemos updatedAt inicialmente
+        note.setUpdatedAt(now);
 
         note.setUser(user);
         note.setChannel(channel);
@@ -94,7 +94,7 @@ public class NoteService {
         noteRepository.deleteById(noteId);
     }
 
-    public Page<Note> getNotesByChannel(Long channelId, Pageable pageable) {
+    public Page<Note>  getNotesByChannel(Long channelId, Pageable pageable) {
         return noteRepository.getAllByChannel_Id(channelId, pageable);
     }
 

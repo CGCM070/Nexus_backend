@@ -17,6 +17,7 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     List<Note> findAllByUser_Id(Long id);
 
     Page<Note> getAllByChannel_Id(Long id, Pageable pageable);
+    Integer countByChannel_Id(Long id);
 
     @Modifying
     @Query("DELETE FROM Note n WHERE n.channel.id = :channelId")
