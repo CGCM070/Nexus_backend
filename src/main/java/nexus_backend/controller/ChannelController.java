@@ -35,7 +35,6 @@ public class ChannelController {
         return channelService.getChannelById(id);
     }
 
-    @PreAuthorize("@securityService.canManageChannel(#channelDTO.serverId)")
     @PostMapping("")
     public Channel createChannel(@RequestBody ChannelCreateDTO channelDTO) {
         log.info("Creating new channel for server {}", channelDTO.getServerId());
